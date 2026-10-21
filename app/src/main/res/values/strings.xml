@@ -56,11 +56,12 @@
 
     <!-- Texture controls -->
     <string name="section_texture">Kết cấu giấy</string>
-    <string name="presets">Kiểu nhanh</string>
-    <string name="preset_light">Mỏng nhẹ</string>
-    <string name="preset_balanced">Cân bằng</string>
-    <string name="preset_old_book">Sách cũ</string>
-    <string name="preset_rough">Giấy thô</string>
+    <string name="paper_type">Loại giấy</string>
+    <string name="paper_plain">Giấy trơn</string>
+    <string name="paper_newsprint">Giấy báo</string>
+    <string name="paper_drawing">Giấy vẽ</string>
+    <string name="paper_kraft">Giấy kraft</string>
+    <string name="paper_do">Giấy dó</string>
     <string name="reset_defaults">Mặc định</string>
     <string name="reset_done">Đã khôi phục mặc định</string>
     <string name="undo">Hoàn tác</string>
@@ -70,6 +71,9 @@
     <string name="coarseness">Độ thô</string>
     <string name="coarseness_low">Mịn</string>
     <string name="coarseness_high">Thô</string>
+    <string name="relief">Độ nổi</string>
+    <string name="relief_low">Phẳng</string>
+    <string name="relief_high">Nổi</string>
     <string name="warmth">Độ ấm</string>
     <string name="warmth_low">Trung tính</string>
     <string name="warmth_high">Ấm</string>

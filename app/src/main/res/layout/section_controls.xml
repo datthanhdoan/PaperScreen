@@ -45,51 +45,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/presets"
+            android:text="@string/paper_type"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
-        <HorizontalScrollView
+        <!-- One chip per PaperPreset, added in code. Wraps on narrow screens. -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/paper_types"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:scrollbars="none">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/presets"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/preset_light"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_light" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/preset_balanced"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_balanced" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/preset_old_book"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_old_book" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/preset_rough"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/preset_rough" />
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:id="@+id/slider_container"

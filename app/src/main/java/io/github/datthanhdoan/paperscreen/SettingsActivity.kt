@@ -21,7 +21,6 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.AttrRes
-import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -32,6 +31,7 @@ import androidx.core.view.updatePadding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -43,6 +43,7 @@ import io.github.datthanhdoan.paperscreen.overlay.PaperView
 import io.github.datthanhdoan.paperscreen.overlay.overlayWindowAlpha
 import io.github.datthanhdoan.paperscreen.settings.PaperSettings
 import io.github.datthanhdoan.paperscreen.settings.SettingsRepository
+import io.github.datthanhdoan.paperscreen.texture.PaperPreset
 import io.github.datthanhdoan.paperscreen.texture.TileCache
 import io.github.datthanhdoan.paperscreen.texture.toBitmap
 import kotlinx.coroutines.Dispatchers
@@ -55,7 +56,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import com.google.android.material.R as MaterialR
@@ -87,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var notificationStepText: TextView
     private lateinit var grantNotifications: View
     private lateinit var dimInDarkSwitch: MaterialSwitch
-    private lateinit var presetChips: List<Pair<Chip, Preset>>
+    private lateinit var paperChips: List<Pair<Chip, PaperPreset>>
     private lateinit var sliders: List<SliderRow>
     private lateinit var paperView: PaperView
     private var windowAlpha = 1f
@@ -197,12 +197,16 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<View>(R.id.new_seed).setOnClickListener { update { it.copy(seed = Random.nextLong()) } }
         findViewById<View>(R.id.reset_defaults).setOnClickListener { resetDefaults() }
 
-        presetChips = PRESETS.map { preset ->
-            val chip = findViewById<Chip>(preset.chipId)
+        val paperGroup = findViewById<ChipGroup>(R.id.paper_types)
+        paperChips = PaperPreset.entries.map { preset ->
+            val chip = layoutInflater.inflate(R.layout.item_paper_chip, paperGroup, false) as Chip
+            chip.id = View.generateViewId()
+            chip.setText(paperLabel(preset))
+            paperGroup.addView(chip)
             chip.setOnClickListener {
                 // The click already toggled the chip; show the outcome before DataStore echoes it.
-                bindPresets(preset.applyTo(settings))
-                update(preset::applyTo)
+                bindPaperChips(preset)
+                update { it.copy(preset = preset) }
             }
             chip to preset
         }
@@ -283,7 +287,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             row.value.text = percent(row.slider.value)
         }
-        bindPresets(s)
+        bindPaperChips(s.preset)
         binding = false
         renderStatus()
         paperView.setAppearance(
@@ -297,8 +301,8 @@ class SettingsActivity : AppCompatActivity() {
         )
     }
 
-    private fun bindPresets(s: PaperSettings) {
-        for ((chip, preset) in presetChips) chip.isChecked = preset.matches(s)
+    private fun bindPaperChips(selected: PaperPreset) {
+        for ((chip, preset) in paperChips) chip.isChecked = preset == selected
     }
 
     private fun renderStatus() {
@@ -456,26 +460,8 @@ class SettingsActivity : AppCompatActivity() {
         var dragging = false
     }
 
-    private class Preset(
-        @IdRes val chipId: Int,
-        val intensity: Float,
-        val coarseness: Float,
-        val warmth: Float,
-        val vignette: Float,
-    ) {
-        fun applyTo(s: PaperSettings) =
-            s.copy(intensity = intensity, coarseness = coarseness, warmth = warmth, vignette = vignette)
-
-        fun matches(s: PaperSettings) =
-            near(s.intensity, intensity) && near(s.coarseness, coarseness) &&
-                near(s.warmth, warmth) && near(s.vignette, vignette)
-
-        private fun near(a: Float, b: Float) = abs(a - b) < PRESET_TOLERANCE
-    }
-
     private companion object {
         const val SLIDER_MAX = 100f
-        const val PRESET_TOLERANCE = 0.005f
         const val PREVIEW_DEBOUNCE_MS = 120L
         const val STATE_OVERLAY_REQUESTED = "overlay_requested"
         const val STATE_NOTIFICATIONS_REQUESTED = "notifications_requested"
@@ -487,6 +473,9 @@ class SettingsActivity : AppCompatActivity() {
             SliderSpec(R.string.coarseness, R.string.coarseness_low, R.string.coarseness_high, { it.coarseness }) { s, v ->
                 s.copy(coarseness = v)
             },
+            SliderSpec(R.string.relief, R.string.relief_low, R.string.relief_high, { it.relief }) { s, v ->
+                s.copy(relief = v)
+            },
             SliderSpec(R.string.warmth, R.string.warmth_low, R.string.warmth_high, { it.warmth }) { s, v ->
                 s.copy(warmth = v)
             },
@@ -495,13 +484,14 @@ class SettingsActivity : AppCompatActivity() {
             },
         )
 
-        private val DEFAULTS = PaperSettings()
-
-        val PRESETS = listOf(
-            Preset(R.id.preset_light, intensity = 0.25f, coarseness = 0.3f, warmth = 0.2f, vignette = 0.15f),
-            Preset(R.id.preset_balanced, DEFAULTS.intensity, DEFAULTS.coarseness, DEFAULTS.warmth, DEFAULTS.vignette),
-            Preset(R.id.preset_old_book, intensity = 0.55f, coarseness = 0.45f, warmth = 0.7f, vignette = 0.5f),
-            Preset(R.id.preset_rough, intensity = 0.7f, coarseness = 0.8f, warmth = 0.3f, vignette = 0.35f),
-        )
+        /** Exhaustive, so a new paper type does not compile without a name. */
+        @StringRes
+        fun paperLabel(preset: PaperPreset): Int = when (preset) {
+            PaperPreset.PLAIN -> R.string.paper_plain
+            PaperPreset.NEWSPRINT -> R.string.paper_newsprint
+            PaperPreset.DRAWING -> R.string.paper_drawing
+            PaperPreset.KRAFT -> R.string.paper_kraft
+            PaperPreset.DO -> R.string.paper_do
+        }
     }
 }
