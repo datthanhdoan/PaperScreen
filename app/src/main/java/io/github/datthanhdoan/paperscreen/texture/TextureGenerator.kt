@@ -21,6 +21,8 @@ import kotlin.random.Random
  * @param intensity 0..1, overall strength ("độ đậm"); 0.5 is the preset's nominal look.
  * @param coarseness 0..1, scales every feature size ("độ thô"), 0.5 = preset size.
  * @param relief 0..1, strength of the emboss shading ("độ nổi").
+ * @param darkUi variant for a dark UI: the preset tint is mostly dropped (it would lift
+ *   black) and relief highlights are stronger, since they are what shows on dark content.
  */
 data class TextureParams(
     val preset: PaperPreset = PaperPreset.DEFAULT,
@@ -28,6 +30,7 @@ data class TextureParams(
     val coarseness: Float,
     val relief: Float = 0.5f,
     val seed: Long,
+    val darkUi: Boolean = false,
 )
 
 /**
@@ -65,6 +68,10 @@ object TextureGenerator {
     private const val SHADOW_GAIN = 0.10f
     private const val MAX_HIGHLIGHT = 0.35f
     private const val LIFT_GAIN = 0.05f
+    private const val DARK_UI_LIFT_GAIN = 0.08f
+
+    /** Share of the preset tint kept on a dark UI: kraft's black lift drops from ~11% to ~2%. */
+    const val DARK_UI_TINT = 0.2f
 
     /** Light from the upper left at a low angle, like a desk lamp grazing the sheet. */
     private val LIGHT = run {
@@ -122,7 +129,8 @@ object TextureGenerator {
         val intensity = params.intensity.coerceIn(0f, 1f)
         val relief = params.relief.coerceIn(0f, 1f)
         val amp = intensity * 2f
-        val tintAmount = min(1f, intensity * 2f)
+        val tintAmount = min(1f, intensity * 2f) * (if (params.darkUi) DARK_UI_TINT else 1f)
+        val liftGain = if (params.darkUi) DARK_UI_LIFT_GAIN else LIFT_GAIN
         val tintAlpha = max(1f - preset.tint.r, max(1f - preset.tint.g, 1f - preset.tint.b)) * tintAmount
         val tintColor = FloatArray(3) { c ->
             if (tintAlpha > 0f) 1f - (1f - preset.tint[c]) * tintAmount / tintAlpha else 0f
@@ -136,7 +144,7 @@ object TextureGenerator {
                 val s = shade[k]
                 val dark = (amp * (preset.baseDarkness + SHADOW_GAIN * max(-s, -MAX_HIGHLIGHT) + albedo[k]))
                     .coerceIn(0f, MAX_DARKENING)
-                val lift = (amp * LIFT_GAIN * max(0f, s) * (0.5f + relief)).coerceIn(0f, MAX_LIFT)
+                val lift = (amp * liftGain * max(0f, s) * (0.5f + relief)).coerceIn(0f, MAX_LIFT)
                 val a = ((dark + lift + tintAlpha) / windowAlpha).coerceAtMost(1f)
                 val o = k * 4
                 for (c in 0..2) {
