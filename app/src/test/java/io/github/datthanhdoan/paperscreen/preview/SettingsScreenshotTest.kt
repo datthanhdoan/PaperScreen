@@ -127,17 +127,18 @@ class SettingsScreenshotTest {
     }
 
     private companion object {
-        const val PHONE = "w393dp-h2300dp-port-xhdpi"
-        const val TABLET = "w1280dp-h800dp-land-hdpi"
+        // Qualifier order matters: size, orientation, night mode, then density.
+        fun phone(mode: String) = "w393dp-h2300dp-port-$mode-xhdpi"
+        fun tablet(mode: String) = "w1280dp-h800dp-land-$mode-hdpi"
 
         val SHOTS = listOf(
-            Shot("phone_dark", "Điện thoại, tối", "$PHONE-night"),
-            Shot("phone_light", "Điện thoại, sáng", "$PHONE-notnight"),
-            Shot("tablet_dark", "Tablet ngang, tối", "$TABLET-night", scrolledToo = true),
-            Shot("tablet_light", "Tablet ngang, sáng", "$TABLET-notnight", scrolledToo = true),
+            Shot("phone_dark", "Điện thoại, tối", phone("night")),
+            Shot("phone_light", "Điện thoại, sáng", phone("notnight")),
+            Shot("tablet_dark", "Tablet ngang, tối", tablet("night"), scrolledToo = true),
+            Shot("tablet_light", "Tablet ngang, sáng", tablet("notnight"), scrolledToo = true),
             Shot(
                 "phone_dark_setup", "Điện thoại, tối, chưa cấp quyền (đã mở hướng dẫn)",
-                "$PHONE-night", canDraw = false, expandRestricted = true,
+                phone("night"), canDraw = false, expandRestricted = true,
             ),
         )
     }
