@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Material 3 scheme from a warm paper-brown seed. Used below Android 12 and as the
-     fallback when dynamic colour is unavailable. Dark values live in values-night. -->
+<!-- iOS-style grouped settings palette (light). Dark values live in values-night;
+     dark mode is the primary look. -->
 <resources>
-    <color name="md_primary">#FF77572F</color>
-    <color name="md_on_primary">#FFFFFFFF</color>
-    <color name="md_primary_container">#FFFFDDB4</color>
-    <color name="md_on_primary_container">#FF2A1800</color>
-    <color name="md_secondary">#FF6D5C48</color>
-    <color name="md_on_secondary">#FFFFFFFF</color>
-    <color name="md_secondary_container">#FFF7DFC5</color>
-    <color name="md_on_secondary_container">#FF261A0C</color>
-    <color name="md_tertiary">#FF52643F</color>
-    <color name="md_on_tertiary">#FFFFFFFF</color>
-    <color name="md_tertiary_container">#FFD4EABB</color>
-    <color name="md_on_tertiary_container">#FF111F04</color>
-    <color name="md_error">#FFBA1A1A</color>
-    <color name="md_on_error">#FFFFFFFF</color>
-    <color name="md_surface">#FFFFF8F3</color>
-    <color name="md_on_surface">#FF201B15</color>
-    <color name="md_surface_variant">#FFF0E0D0</color>
-    <color name="md_on_surface_variant">#FF50453A</color>
-    <color name="md_outline">#FF827568</color>
-    <color name="md_outline_variant">#FFD4C4B4</color>
-    <color name="md_surface_container_lowest">#FFFFFFFF</color>
-    <color name="md_surface_container_low">#FFFBF2EA</color>
-    <color name="md_surface_container">#FFF5ECE4</color>
-    <color name="md_surface_container_high">#FFEFE6DE</color>
-    <color name="md_surface_container_highest">#FFEAE1D9</color>
+    <color name="ios_background">#FFF2F2F7</color>
+    <color name="ios_cell">#FFFFFFFF</color>
+    <color name="ios_separator">#FFC6C6C8</color>
+    <color name="ios_label">#FF000000</color>
+    <color name="ios_secondary_label">#FF6C6C70</color>
+    <color name="ios_chevron">#FFC4C4C7</color>
+    <!-- Text accent: darker than the orange fill so it passes 4.5:1 on white. -->
+    <color name="ios_accent">#FFC26A00</color>
+    <color name="ios_orange">#FFFF9500</color>
+    <color name="ios_blue">#FF007AFF</color>
+    <color name="ios_red">#FFD70015</color>
+    <color name="ios_green">#FF34C759</color>
+    <color name="ios_toggle_off">#FFE9E9EA</color>
+    <color name="ios_segment_background">#FFEEEEEF</color>
+    <color name="ios_segment_selected">#FFFFFFFF</color>
+    <color name="ios_slider_track">#FFE5E5EA</color>
+    <color name="ios_slider_fill">#FFFF9500</color>
+    <color name="ios_pressed">#1F000000</color>
 
-    <!-- Fixed colours of the sample picture in the preview. -->
+    <!-- The sample page inside the preview. -->
+    <color name="preview_page">#FFFFFFFF</color>
+    <color name="preview_text">#FF1C1C1E</color>
+    <color name="preview_text_secondary">#FF6C6C70</color>
     <color name="preview_sky_top">#FFF6C98F</color>
     <color name="preview_sky_bottom">#FFF9E6C6</color>
     <color name="preview_sun">#FFFFF6DF</color>

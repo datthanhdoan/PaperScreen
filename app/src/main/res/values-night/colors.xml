@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Dark mode, the primary look: true black page, raised grouped cells. -->
 <resources>
-    <color name="md_primary">#FFE8BF8E</color>
-    <color name="md_on_primary">#FF432C06</color>
-    <color name="md_primary_container">#FF5D4019</color>
-    <color name="md_on_primary_container">#FFFFDDB4</color>
-    <color name="md_secondary">#FFDAC3AA</color>
-    <color name="md_on_secondary">#FF3C2E1D</color>
-    <color name="md_secondary_container">#FF554432</color>
-    <color name="md_on_secondary_container">#FFF7DFC5</color>
-    <color name="md_tertiary">#FFB8CEA1</color>
-    <color name="md_on_tertiary">#FF253515</color>
-    <color name="md_tertiary_container">#FF3B4C2A</color>
-    <color name="md_on_tertiary_container">#FFD4EABB</color>
-    <color name="md_error">#FFFFB4AB</color>
-    <color name="md_on_error">#FF690005</color>
-    <color name="md_surface">#FF18120C</color>
-    <color name="md_on_surface">#FFEDE0D5</color>
-    <color name="md_surface_variant">#FF50453A</color>
-    <color name="md_on_surface_variant">#FFD4C4B4</color>
-    <color name="md_outline">#FF9C8E80</color>
-    <color name="md_outline_variant">#FF50453A</color>
-    <color name="md_surface_container_lowest">#FF120D07</color>
-    <color name="md_surface_container_low">#FF201A13</color>
-    <color name="md_surface_container">#FF251E17</color>
-    <color name="md_surface_container_high">#FF302821</color>
-    <color name="md_surface_container_highest">#FF3B332B</color>
+    <color name="ios_background">#FF000000</color>
+    <color name="ios_cell">#FF1C1C1E</color>
+    <color name="ios_separator">#FF38383A</color>
+    <color name="ios_label">#FFFFFFFF</color>
+    <color name="ios_secondary_label">#FF8D8D93</color>
+    <color name="ios_chevron">#FF5A5A5F</color>
+    <color name="ios_accent">#FFFF9F0A</color>
+    <color name="ios_orange">#FFFF9F0A</color>
+    <color name="ios_blue">#FF0A84FF</color>
+    <color name="ios_red">#FFFF453A</color>
+    <color name="ios_green">#FF30D158</color>
+    <color name="ios_toggle_off">#FF39393D</color>
+    <color name="ios_segment_background">#FF2C2C30</color>
+    <color name="ios_segment_selected">#FF636366</color>
+    <color name="ios_slider_track">#FF3A3A3E</color>
+    <color name="ios_slider_fill">#FFFF9F0A</color>
+    <color name="ios_pressed">#24FFFFFF</color>
 
+    <color name="preview_page">#FF121212</color>
+    <color name="preview_text">#FFE8E8ED</color>
+    <color name="preview_text_secondary">#FF8D8D93</color>
     <color name="preview_sky_top">#FF5A4A6E</color>
     <color name="preview_sky_bottom">#FFB98A72</color>
     <color name="preview_sun">#FFF3D9A8</color>

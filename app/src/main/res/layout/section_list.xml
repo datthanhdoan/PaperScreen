@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The grouped settings list, shared by the phone and the two-pane layout. Slider rows
+     are added in code from SettingsActivity's specs; the dark and light sections are
+     reordered in code so the mode in use comes first. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Main switch -->
+    <LinearLayout
+        android:id="@+id/main_group"
+        style="@style/Ios.Group"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp">
+
+            <ImageView
+                style="@style/Ios.IconTile"
+                android:backgroundTint="@color/ios_orange"
+                android:src="@drawable/ic_paper" />
+
+            <io.github.datthanhdoan.paperscreen.ui.IosSwitch
+                android:id="@+id/enabled_switch"
+                style="@style/Ios.Switch"
+                android:minHeight="52dp"
+                android:paddingStart="0dp"
+                android:text="@string/enabled" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/enabled_status"
+        style="@style/Ios.Footer"
+        android:accessibilityLiveRegion="polite" />
+
+    <!-- Setup: hidden once everything is granted -->
+    <LinearLayout
+        android:id="@+id/setup_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Ios.Header"
+            android:text="@string/section_setup" />
+
+        <LinearLayout
+            android:id="@+id/setup_group"
+            style="@style/Ios.Group">
+
+            <LinearLayout
+                android:id="@+id/row_overlay"
+                style="@style/Ios.Row">
+
+                <ImageView
+                    style="@style/Ios.IconTile"
+                    android:backgroundTint="@color/ios_blue"
+                    android:src="@drawable/ic_layers" />
+
+                <TextView
+                    style="@style/Ios.RowTitle"
+                    android:text="@string/row_overlay" />
+
+                <TextView
+                    android:id="@+id/overlay_value"
+                    style="@style/Ios.RowValue" />
+
+                <ImageView
+                    android:id="@+id/overlay_chevron"
+                    style="@style/Ios.Chevron" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/restricted_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View style="@style/Ios.Separator.Icon" />
+
+                <LinearLayout
+                    android:id="@+id/row_restricted"
+                    style="@style/Ios.Row"
+                    android:paddingStart="58dp">
+
+                    <TextView
+                        style="@style/Ios.RowTitle"
+                        android:text="@string/restricted_toggle"
+                        android:textColor="@color/ios_accent" />
+
+                    <ImageView
+                        android:id="@+id/restricted_chevron"
+                        style="@style/Ios.Chevron"
+                        android:src="@drawable/ic_chevron_down" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/restricted_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="58dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="2sp"
+                        android:text="@string/restricted_help"
+                        android:textColor="@color/ios_secondary_label"
+                        android:textSize="15sp" />
+
+                    <include
+                        layout="@layout/view_restricted_illustration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp" />
+
+                    <TextView
+                        android:id="@+id/open_app_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="-12dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_row"
+                        android:gravity="center_vertical"
+                        android:minHeight="48dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="@string/open_app_info"
+                        android:textColor="@color/ios_accent"
+                        android:textSize="17sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/notifications_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View style="@style/Ios.Separator.Icon" />
+
+                <LinearLayout
+                    android:id="@+id/row_notifications"
+                    style="@style/Ios.Row">
+
+                    <ImageView
+                        style="@style/Ios.IconTile"
+                        android:backgroundTint="@color/ios_red"
+                        android:src="@drawable/ic_notifications" />
+
+                    <TextView
+                        style="@style/Ios.RowTitle"
+                        android:text="@string/row_notifications" />
+
+                    <TextView
+                        android:id="@+id/notifications_value"
+                        style="@style/Ios.RowValue" />
+
+                    <ImageView
+                        android:id="@+id/notifications_chevron"
+                        style="@style/Ios.Chevron" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/setup_footer"
+            style="@style/Ios.Footer"
+            android:text="@string/setup_footer" />
+    </LinearLayout>
+
+    <!-- Paper type -->
+    <TextView
+        style="@style/Ios.Header"
+        android:text="@string/paper_type" />
+
+    <LinearLayout
+        style="@style/Ios.Group"
+        android:padding="12dp">
+
+        <RadioGroup
+            android:id="@+id/paper_types"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_segmented"
+            android:contentDescription="@string/paper_type"
+            android:orientation="horizontal"
+            android:padding="2dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/paper_note"
+        style="@style/Ios.Footer" />
+
+    <!-- Shared texture -->
+    <TextView
+        style="@style/Ios.Header"
+        android:text="@string/section_shared" />
+
+    <LinearLayout
+        android:id="@+id/shared_rows"
+        style="@style/Ios.Group" />
+
+    <TextView
+        style="@style/Ios.Footer"
+        android:text="@string/shared_footer" />
+
+    <!-- Per-mode sections; SettingsActivity puts the mode in use first. -->
+    <LinearLayout
+        android:id="@+id/mode_sections"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/dark_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dark_header"
+                style="@style/Ios.Header" />
+
+            <LinearLayout
+                android:id="@+id/dark_group"
+                style="@style/Ios.Group">
+
+                <io.github.datthanhdoan.paperscreen.ui.IosSwitch
+                    android:id="@+id/dark_profile_switch"
+                    style="@style/Ios.Switch"
+                    android:text="@string/dark_profile" />
+
+                <LinearLayout
+                    android:id="@+id/dark_rows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/dim_block"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View style="@style/Ios.Separator" />
+
+                    <io.github.datthanhdoan.paperscreen.ui.IosSwitch
+                        android:id="@+id/dim_in_dark_switch"
+                        style="@style/Ios.Switch"
+                        android:text="@string/dim_in_dark" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/dark_footer"
+                style="@style/Ios.Footer" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/light_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/light_header"
+                style="@style/Ios.Header" />
+
+            <LinearLayout
+                android:id="@+id/light_rows"
+                style="@style/Ios.Group" />
+
+            <TextView
+                android:id="@+id/light_footer"
+                style="@style/Ios.Footer" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Actions -->
+    <LinearLayout
+        android:id="@+id/actions_group"
+        style="@style/Ios.Group"
+        android:layout_marginTop="36dp">
+
+        <TextView
+            android:id="@+id/new_seed"
+            style="@style/Ios.ActionRow"
+            android:text="@string/new_seed" />
+
+        <View style="@style/Ios.Separator" />
+
+        <TextView
+            android:id="@+id/reset_defaults"
+            style="@style/Ios.ActionRow"
+            android:text="@string/reset_defaults"
+            android:textColor="@color/ios_red" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/Ios.Footer"
+        android:paddingTop="24dp"
+        android:text="@string/night_light_tip" />
+
+    <TextView
+        style="@style/Ios.Footer"
+        android:paddingTop="10dp"
+        android:paddingBottom="32dp"
+        android:text="@string/limitations" />
+</LinearLayout>

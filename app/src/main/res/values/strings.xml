@@ -14,78 +14,81 @@
 
     <!-- Main switch -->
     <string name="enabled">Lớp giấy</string>
-    <string name="status_on">Đang phủ giấy lên mọi ứng dụng</string>
+    <string name="status_on">Đang phủ giấy lên mọi ứng dụng.</string>
     <string name="status_off">Đang tắt. Bật để phủ giấy lên toàn màn hình.</string>
-    <string name="status_need_permission">Cần cấp quyền hiển thị ở bước bên dưới trước</string>
+    <string name="status_need_permission">Cần cấp quyền hiển thị ở mục Thiết lập bên dưới.</string>
 
-    <!-- Setup steps -->
+    <!-- Setup -->
     <string name="section_setup">Thiết lập</string>
-    <string name="setup_summary">Chỉ cần làm một lần.</string>
-    <string name="step_done">Đã xong</string>
-    <string name="step_pending">Chưa xong</string>
-    <string name="step_overlay_title">1. Hiển thị trên ứng dụng khác</string>
-    <string name="overlay_granted">Đã cấp quyền.</string>
-    <string name="overlay_missing">Bắt buộc. Cho phép PaperScreen vẽ lớp giấy lên các ứng dụng khác.</string>
-    <string name="grant_overlay">Cấp quyền</string>
+    <string name="row_overlay">Hiển thị trên ứng dụng khác</string>
+    <string name="row_notifications">Thông báo</string>
+    <string name="value_granted">Đã cấp</string>
+    <string name="value_grant">Cấp quyền</string>
+    <string name="value_allowed">Đã bật</string>
+    <string name="value_allow">Cho phép</string>
+    <string name="setup_footer">Hiển thị trên ứng dụng khác là bắt buộc. Thông báo thì không: chúng có nút Tạm dừng và Tắt nhanh.</string>
     <string name="restricted_toggle">Công tắc bị mờ trong Cài đặt?</string>
-    <string name="restricted_help">Android chặn quyền này với ứng dụng cài từ file APK. Mở Thông tin ứng dụng, bấm menu ⋮ ở góc trên bên phải, chọn mục như hình, xác thực, rồi quay lại bấm Cấp quyền.</string>
+    <string name="restricted_toggle_expanded">Đang mở hướng dẫn</string>
+    <string name="restricted_toggle_collapsed">Đang đóng hướng dẫn</string>
+    <string name="restricted_help">Android chặn quyền này với ứng dụng cài từ file APK. Mở Thông tin ứng dụng, bấm menu ⋮ ở góc trên bên phải, chọn mục như hình, xác thực, rồi quay lại cấp quyền.</string>
     <string name="restricted_mock_title">Thông tin ứng dụng</string>
     <string name="restricted_mock_item">Cho phép cài đặt bị hạn chế</string>
     <string name="restricted_mock_item_en">Allow restricted settings</string>
     <string name="restricted_illustration">Minh họa: menu ba chấm ở góc phải trang Thông tin ứng dụng, mục Cho phép cài đặt bị hạn chế</string>
     <string name="open_app_info">Mở Thông tin ứng dụng</string>
-    <string name="step_notifications_title">2. Thông báo (không bắt buộc)</string>
-    <string name="notifications_help">Có nút Tạm dừng và Tắt nhanh trong thông báo. Không cho phép thì lớp giấy vẫn chạy.</string>
-    <string name="notifications_granted">Đã cho phép.</string>
-    <string name="grant_notifications">Cho phép</string>
 
     <!-- Preview -->
-    <string name="section_preview">Xem trước</string>
-    <string name="preview_hint">Giữ ngón tay trên khung để so sánh</string>
+    <string name="preview_hint">Giữ khung để so sánh</string>
     <string name="preview_compare">Ẩn giấy</string>
-    <string name="preview_compare_description">Ẩn lớp giấy trong khung xem trước để so sánh</string>
+    <string name="preview_compare_off">Hiện giấy</string>
     <string name="preview_overline">Góc đọc</string>
     <string name="preview_title">Đọc chậm lại một chút</string>
-    <string name="preview_body">Ánh sáng chiều xiên qua khung cửa, trang sách hơi ngả vàng. Màn hình cũng có thể dịu mắt như thế: một lớp sợi giấy mỏng phủ lên chữ và ảnh, đủ để bớt cảm giác kính phẳng mà không làm nhòe nội dung.</string>
-    <string name="preview_body_2">Kéo các thanh bên cạnh và xem khung này thay đổi ngay.</string>
-    <string name="preview_heading_2">Trắng và đen</string>
-    <string name="preview_body_3">Nền trắng được nhuộm nhẹ như giấy, màu đen gần như giữ nguyên.</string>
+    <string name="preview_body">Ánh sáng chiều xiên qua khung cửa, trang sách hơi ngả vàng. Một lớp sợi giấy mỏng phủ lên chữ và ảnh, đủ để bớt cảm giác kính phẳng.</string>
     <string name="preview_white">Trắng</string>
     <string name="preview_black">Đen</string>
-    <string name="preview_image_description">Ảnh mẫu: đồi núi lúc hoàng hôn</string>
 
-    <!-- Texture controls -->
-    <string name="section_texture">Kết cấu giấy</string>
+    <!-- Paper type -->
     <string name="paper_type">Loại giấy</string>
-    <string name="paper_plain">Giấy trơn</string>
-    <string name="paper_newsprint">Giấy báo</string>
-    <string name="paper_drawing">Giấy vẽ</string>
-    <string name="paper_kraft">Giấy kraft</string>
-    <string name="paper_do">Giấy dó</string>
-    <string name="reset_defaults">Mặc định</string>
-    <string name="reset_done">Đã khôi phục mặc định</string>
-    <string name="undo">Hoàn tác</string>
-    <string name="intensity">Độ đậm</string>
-    <string name="intensity_low">Nhạt</string>
-    <string name="intensity_high">Đậm</string>
-    <string name="coarseness">Độ thô</string>
-    <string name="coarseness_low">Mịn</string>
-    <string name="coarseness_high">Thô</string>
-    <string name="relief">Độ nổi</string>
-    <string name="relief_low">Phẳng</string>
-    <string name="relief_high">Nổi</string>
-    <string name="warmth">Độ ấm</string>
-    <string name="warmth_low">Trung tính</string>
-    <string name="warmth_high">Ấm</string>
-    <string name="vignette">Viền tối</string>
-    <string name="vignette_low">Không</string>
-    <string name="vignette_high">Rõ</string>
-    <string name="percent">%1$d%%</string>
-    <string name="dim_in_dark">Giảm tông ấm khi dùng giao diện tối</string>
-    <string name="new_seed">Đổi mẫu hạt giấy</string>
+    <string name="paper_plain">Trơn</string>
+    <string name="paper_newsprint">Báo</string>
+    <string name="paper_drawing">Vẽ</string>
+    <string name="paper_kraft">Kraft</string>
+    <string name="paper_do">Dó</string>
+    <string name="paper_plain_note">Giấy trơn: mịn như giấy sách, vài sợi mờ.</string>
+    <string name="paper_newsprint_note">Giấy báo: xám hơn, có sợi ngắn và đốm nhỏ.</string>
+    <string name="paper_drawing_note">Giấy vẽ: mặt sần, có những vòm nổi nhỏ.</string>
+    <string name="paper_kraft_note">Giấy kraft: nâu, sợi dài và rõ.</string>
+    <string name="paper_do_note">Giấy dó: sợi dài mềm, ngả vàng nhẹ.</string>
 
-    <!-- Tips -->
-    <string name="night_light_tip">Muốn tông ấm rõ hơn mà không làm sáng màu đen, hãy dùng Ánh sáng ban đêm (Night Light / Eye comfort) của hệ thống cùng với lớp giấy.</string>
+    <!-- Texture -->
+    <string name="section_shared">Kết cấu</string>
+    <string name="shared_footer">Dùng chung cho cả chế độ sáng và tối.</string>
+    <string name="section_dark">Chế độ tối</string>
+    <string name="section_light">Chế độ sáng</string>
+    <string name="section_strength">Cường độ</string>
+    <string name="section_in_use">%1$s · Đang dùng</string>
+    <string name="dark_profile">Thiết lập riêng khi tối</string>
+    <string name="dark_footer_profile">Độ ấm càng cao càng làm màu đen sáng lên, nên giữ thấp.</string>
+    <string name="dark_footer_shared">Giao diện tối dùng các mức của mục Cường độ.</string>
+    <string name="strength_footer">Áp dụng cho cả chế độ sáng và tối.</string>
+    <string name="dim_in_dark">Giảm tông ấm</string>
+    <string name="intensity">Độ đậm</string>
+    <string name="coarseness">Độ thô</string>
+    <string name="relief">Độ nổi</string>
+    <string name="warmth">Độ ấm</string>
+    <string name="vignette">Viền tối</string>
+    <string name="percent">%1$d%%</string>
+
+    <!-- Actions -->
+    <string name="new_seed">Đổi mẫu hạt giấy</string>
+    <string name="reset_defaults">Khôi phục mặc định</string>
+    <string name="reset_confirm_title">Khôi phục mặc định?</string>
+    <string name="reset_confirm_message">Mọi mức kết cấu, loại giấy và thiết lập chế độ tối sẽ về giá trị ban đầu.</string>
+    <string name="reset_confirm">Khôi phục</string>
+    <string name="cancel">Hủy</string>
+
+    <!-- Notes -->
+    <string name="night_light_tip">Muốn tông ấm rõ hơn mà không làm sáng màu đen, hãy bật Ánh sáng ban đêm (Night Light / Eye comfort) của hệ thống cùng với lớp giấy.</string>
     <string name="limitations">Lớp giấy nằm dưới thanh trạng thái, bàn phím và màn hình khóa. Hệ thống tự ẩn nó trên trình cài đặt và một số app ngân hàng. Ảnh chụp màn hình sẽ có cả lớp giấy.</string>
 
     <string name="need_overlay_permission">Hãy cấp quyền hiển thị trên ứng dụng khác trước.</string>

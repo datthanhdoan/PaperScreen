@@ -1,54 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Phone / narrow windows: one column. layout-w720dp has the two-pane version. -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<!-- Phone / narrow windows: large title, preview card, grouped list, one column.
+     layout-w720dp has the two-pane version. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/scroll">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="@string/app_name" />
-    </com.google.android.material.appbar.AppBarLayout>
+    android:layout_height="match_parent"
+    android:background="@color/ios_background">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp">
+            android:orientation="vertical">
 
-            <include layout="@layout/section_main_switch" />
-
-            <include layout="@layout/section_setup" />
+            <TextView
+                android:id="@+id/large_title"
+                style="@style/Ios.LargeTitle"
+                android:text="@string/app_name" />
 
             <include
                 layout="@layout/section_preview"
                 android:layout_width="match_parent"
                 android:layout_height="420dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp" />
 
-            <include layout="@layout/section_controls" />
-
-            <include layout="@layout/section_tips" />
+            <include layout="@layout/section_list" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

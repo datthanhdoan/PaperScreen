@@ -54,6 +54,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    testOptions {
+        // Robolectric renders the real layouts and themes in SettingsScreenshotTest.
+        unitTests.isIncludeAndroidResources = true
+    }
+
     lint {
         abortOnError = true
         checkReleaseBuilds = true
@@ -73,4 +78,5 @@ dependencies {
     implementation(libs.google.material)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
 }

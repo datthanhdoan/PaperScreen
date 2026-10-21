@@ -7,6 +7,8 @@ coroutines = "1.11.0"
 # Material 3 widgets for the Views UI (pulls in appcompat).
 material = "1.13.0"
 junit = "4.13.2"
+# JVM screenshots of the settings screen (test only). 4.16 runs SDK <= 34 on JDK 17.
+robolectric = "4.16.1"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
@@ -14,6 +16,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 google-material = { module = "com.google.android.material:material", version.ref = "material" }
 junit = { module = "junit:junit", version.ref = "junit" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
