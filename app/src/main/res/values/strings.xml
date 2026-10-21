@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PaperScreen</string>
+    <string name="tile_label">Lớp giấy</string>
+    <string name="tile_on">Đang bật</string>
+    <string name="tile_off">Đang tắt</string>
+
+    <string name="notification_channel">Lớp giấy đang hiển thị</string>
+    <string name="notification_running">Lớp giấy đang phủ màn hình</string>
+    <string name="notification_paused">Đã tạm dừng, tự bật lại sau 5 phút</string>
+    <string name="action_pause">Tạm dừng</string>
+    <string name="action_resume">Tiếp tục</string>
+    <string name="action_stop">Tắt</string>
+
+    <string name="section_permissions">Quyền</string>
+    <string name="overlay_granted">Đã có quyền hiển thị trên ứng dụng khác.</string>
+    <string name="overlay_missing">Cần quyền \"Hiển thị trên ứng dụng khác\" để phủ lớp giấy.</string>
+    <string name="grant_overlay">Cấp quyền hiển thị</string>
+    <string name="restricted_help">Nếu công tắc trong Cài đặt bị mờ hoặc báo \"Cài đặt bị hạn chế\" (thường gặp khi cài APK từ file): mở Thông tin ứng dụng, bấm menu ⋮ ở góc trên bên phải, chọn \"Cho phép cài đặt bị hạn chế\" (Allow restricted settings), xác thực, rồi quay lại cấp quyền hiển thị.</string>
+    <string name="open_app_info">Mở Thông tin ứng dụng</string>
+    <string name="notifications_help">Không bắt buộc. Cho phép thông báo để có nút Tạm dừng và Tắt nhanh. Không cho phép thì lớp giấy vẫn chạy.</string>
+    <string name="grant_notifications">Cho phép thông báo</string>
+
+    <string name="enabled">Bật lớp giấy</string>
+    <string name="section_texture">Kết cấu giấy</string>
+    <string name="intensity">Độ đậm</string>
+    <string name="coarseness">Độ thô</string>
+    <string name="warmth">Độ ấm</string>
+    <string name="vignette">Viền tối (vignette)</string>
+    <string name="dim_in_dark">Giảm tông ấm khi dùng giao diện tối</string>
+    <string name="new_seed">Đổi mẫu hạt giấy</string>
+    <string name="night_light_tip">Mẹo: muốn tông ấm rõ hơn mà không làm sáng màu đen, hãy dùng Ánh sáng ban đêm (Night Light / Eye comfort) của hệ thống cùng với lớp giấy.</string>
+    <string name="limitations">Lớp giấy nằm dưới thanh trạng thái, bàn phím và màn hình khóa. Hệ thống tự ẩn nó trên trình cài đặt và một số app ngân hàng. Ảnh chụp màn hình sẽ có cả lớp giấy.</string>
+
+    <string name="need_overlay_permission">Hãy cấp quyền hiển thị trên ứng dụng khác trước.</string>
+    <string name="start_failed">Không khởi động được lớp giấy. Thử lại từ màn hình này.</string>
+    <string name="cannot_open_settings">Không mở được Cài đặt.</string>
+</resources>

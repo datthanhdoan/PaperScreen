@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    env:
+      VERSION_CODE: ${{ github.run_number }}
+      KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: gradle/actions/wrapper-validation@v6
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Version from tag
+        run: echo "VERSION_NAME=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Decode signing keystore
+        if: env.KEYSTORE_B64 != ''
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/paperscreen.keystore"
+          echo "KEYSTORE_PATH=$RUNNER_TEMP/paperscreen.keystore" >> "$GITHUB_ENV"
+
+      - name: Warn about debug-key fallback
+        if: env.KEYSTORE_B64 == ''
+        run: echo "::warning::KEYSTORE_B64 is not set; the release APK is signed with a throwaway debug key and future releases will not install over it. See docs/signing.md."
+
+      - name: Build release APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew --stacktrace testReleaseUnitTest assembleRelease
+
+      - name: Verify and rename APK
+        run: |
+          apksigner="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner"
+          apk="$(ls app/build/outputs/apk/release/*.apk | head -1)"
+          "$apksigner" verify --print-certs "$apk" | tee -a "$GITHUB_STEP_SUMMARY"
+          mkdir -p dist
+          cp "$apk" "dist/PaperScreen-${GITHUB_REF_NAME}.apk"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "dist/PaperScreen-${GITHUB_REF_NAME}.apk" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "PaperScreen ${GITHUB_REF_NAME}" \
+            --generate-notes \
+            --verify-tag

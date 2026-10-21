@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PaperScreen" parent="android:Theme.Material.Light">
+        <item name="android:colorPrimary">@color/paper_primary</item>
+        <item name="android:colorAccent">@color/paper_accent</item>
+    </style>
+
+    <style name="Theme.PaperScreen.Invisible" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+</resources>
