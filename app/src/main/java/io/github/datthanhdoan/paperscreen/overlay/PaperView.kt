@@ -14,15 +14,6 @@ import android.view.View
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-/** What the view draws on top of the tile. Pure value so it is cheap to diff. */
-data class PaperAppearance(
-    val warmth: Float = 0f,
-    val vignette: Float = 0f,
-    val windowAlpha: Float = 0.8f,
-    val nightMode: Boolean = false,
-    val dimTintInDarkMode: Boolean = true,
-)
-
 /**
  * Static full-screen paper layer: ARGB tile (BitmapShader REPEAT) -> warm tint -> vignette.
  * There is no animation; the view only invalidates when its inputs or size change.
@@ -92,40 +83,24 @@ class PaperView(context: Context) : View(context) {
         listener?.onViewConfigurationChanged(newConfig)
     }
 
-    /**
-     * Section B3: approximate a multiply by m = (1, 0.96, 0.88) at full warmth with
-     * src colour C = 1 - (1 - m) / a and alpha a = max(1 - m) = 0.12. Exact on white,
-     * lifts black by C * a. Divided by the window alpha, which scales every pixel.
-     */
+    /** See [PaperLayers.tintAlpha]. */
     private fun updateTint() {
-        val a = appearance
-        val darkFactor = if (a.nightMode && a.dimTintInDarkMode) DARK_MODE_TINT_FACTOR else 1f
-        val alpha = (MAX_TINT_ALPHA * a.warmth * darkFactor / a.windowAlpha).coerceIn(0f, 1f)
-        tintAlpha = (alpha * 255f).roundToInt()
-        tintPaint.color = Color.argb(tintAlpha, 255, 170, 0)
+        tintAlpha = (PaperLayers.tintAlpha(appearance) * 255f).roundToInt()
+        tintPaint.color = (PaperLayers.TINT and 0x00FFFFFF) or (tintAlpha shl 24)
     }
 
     private fun updateVignette() {
-        val a = appearance
-        vignetteAlpha = ((MAX_VIGNETTE_ALPHA * a.vignette / a.windowAlpha).coerceIn(0f, 1f) * 255f).roundToInt()
+        vignetteAlpha = (PaperLayers.vignetteAlpha(appearance) * 255f).roundToInt()
         if (vignetteAlpha == 0 || width == 0 || height == 0) {
             vignettePaint.shader = null
             return
         }
-        val edge = (INK and 0x00FFFFFF) or (vignetteAlpha shl 24)
+        val edge = (PaperLayers.INK and 0x00FFFFFF) or (vignetteAlpha shl 24)
         vignettePaint.shader = RadialGradient(
             width / 2f, height / 2f, hypot(width.toFloat(), height.toFloat()) / 2f,
             intArrayOf(Color.TRANSPARENT, Color.TRANSPARENT, edge),
-            floatArrayOf(0f, 0.55f, 1f),
+            PaperLayers.VIGNETTE_STOPS,
             Shader.TileMode.CLAMP,
         )
-    }
-
-    private companion object {
-        /** Very dark warm brown for the vignette: close to a grey multiply, slightly warmer (B3). */
-        val INK = Color.rgb(0x22, 0x18, 0x0E)
-        const val MAX_TINT_ALPHA = 0.12f
-        const val MAX_VIGNETTE_ALPHA = 0.05f
-        const val DARK_MODE_TINT_FACTOR = 0.25f
     }
 }

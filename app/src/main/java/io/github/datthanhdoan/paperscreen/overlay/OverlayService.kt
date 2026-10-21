@@ -35,7 +35,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -156,10 +155,10 @@ class OverlayService : Service(), PaperView.Listener {
                 nightMode.collect { updateAppearance() }
             }
             launch {
-                combine(
-                    repository.settings.map { it.textureParams }.distinctUntilChanged(),
-                    densityDpi,
-                ) { params, dpi -> params to dpi }
+                // Light and dark UI use different tiles (dark profile, reduced preset tint).
+                combine(repository.settings, nightMode, densityDpi) { s, night, dpi ->
+                    s.textureParams(night) to dpi
+                }
                     .distinctUntilChanged()
                     .collectLatest { (params, dpi) -> loadTile(params, dpi) }
             }
@@ -175,7 +174,7 @@ class OverlayService : Service(), PaperView.Listener {
         paperView.setTile(bitmap)
     }
 
-    /** Section A6: density changes regenerate the tile, uiMode changes adjust the tint. */
+    /** Section A6: density and uiMode changes both pick a new tile and appearance. */
     private fun applyConfiguration(config: Configuration) {
         densityDpi.value = config.densityDpi
         nightMode.value =
@@ -183,15 +182,7 @@ class OverlayService : Service(), PaperView.Listener {
     }
 
     private fun updateAppearance() {
-        paperView.setAppearance(
-            PaperAppearance(
-                warmth = settings.warmth,
-                vignette = settings.vignette,
-                windowAlpha = windowAlpha,
-                nightMode = nightMode.value,
-                dimTintInDarkMode = settings.dimTintInDarkMode,
-            ),
-        )
+        paperView.setAppearance(settings.appearance(nightMode.value, windowAlpha))
     }
 
     private fun updateAttachment() {
