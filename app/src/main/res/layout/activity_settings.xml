@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/SectionTitle"
+            android:text="@string/section_permissions" />
+
+        <TextView
+            android:id="@+id/overlay_status"
+            style="@style/Body" />
+
+        <Button
+            android:id="@+id/grant_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/grant_overlay" />
+
+        <LinearLayout
+            android:id="@+id/restricted_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Body"
+                android:text="@string/restricted_help" />
+
+            <Button
+                android:id="@+id/open_app_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/open_app_info" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/notification_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Body"
+                android:text="@string/notifications_help" />
+
+            <Button
+                android:id="@+id/grant_notifications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/grant_notifications" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/enabled_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:minHeight="48dp"
+            android:text="@string/enabled"
+            android:textSize="18sp" />
+
+        <TextView
+            style="@style/SectionTitle"
+            android:text="@string/section_texture" />
+
+        <TextView
+            style="@style/SliderLabel"
+            android:labelFor="@+id/intensity"
+            android:text="@string/intensity" />
+
+        <SeekBar
+            android:id="@+id/intensity"
+            style="@style/Slider" />
+
+        <TextView
+            style="@style/SliderLabel"
+            android:labelFor="@+id/coarseness"
+            android:text="@string/coarseness" />
+
+        <SeekBar
+            android:id="@+id/coarseness"
+            style="@style/Slider" />
+
+        <TextView
+            style="@style/SliderLabel"
+            android:labelFor="@+id/warmth"
+            android:text="@string/warmth" />
+
+        <SeekBar
+            android:id="@+id/warmth"
+            style="@style/Slider" />
+
+        <TextView
+            style="@style/SliderLabel"
+            android:labelFor="@+id/vignette"
+            android:text="@string/vignette" />
+
+        <SeekBar
+            android:id="@+id/vignette"
+            style="@style/Slider" />
+
+        <Switch
+            android:id="@+id/dim_in_dark_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:minHeight="48dp"
+            android:text="@string/dim_in_dark" />
+
+        <Button
+            android:id="@+id/new_seed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/new_seed" />
+
+        <TextView
+            style="@style/Body"
+            android:layout_marginTop="16dp"
+            android:text="@string/night_light_tip" />
+
+        <TextView
+            style="@style/Body"
+            android:text="@string/limitations" />
+    </LinearLayout>
+</ScrollView>
