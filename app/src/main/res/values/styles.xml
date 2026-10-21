@@ -138,14 +138,20 @@
         <item name="android:background">@drawable/bg_row</item>
     </style>
 
-    <!-- Thin track, round white thumb, no halo or ticks. The legacy MaterialComponents
-         slider has the round thumb; the M3 one draws a vertical bar. -->
+    <!-- Thin track, round white thumb, no halo, ticks, thumb gap or stop dot. Material
+         1.13 sizes the thumb from thumbWidth/thumbHeight, so both are set to a circle. -->
     <style name="Ios.Slider" parent="Widget.MaterialComponents.Slider">
         <item name="trackHeight">4dp</item>
         <item name="trackColorActive">@color/ios_slider_fill</item>
         <item name="trackColorInactive">@color/ios_slider_track</item>
         <item name="thumbColor">#FFFFFFFF</item>
         <item name="thumbRadius">14dp</item>
+        <item name="thumbWidth">28dp</item>
+        <item name="thumbHeight">28dp</item>
+        <item name="thumbTrackGapSize">0dp</item>
+        <item name="trackStopIndicatorSize">0dp</item>
+        <item name="trackInsideCornerSize">2dp</item>
+        <item name="trackCornerSize">2dp</item>
         <item name="thumbElevation">3dp</item>
         <item name="thumbStrokeColor">#1F000000</item>
         <item name="thumbStrokeWidth">0.5dp</item>

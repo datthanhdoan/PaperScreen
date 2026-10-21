@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
+    <io.github.datthanhdoan.paperscreen.ui.RoundedFrameLayout
         android:id="@+id/preview_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -88,7 +88,7 @@
                     android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
-    </FrameLayout>
+    </io.github.datthanhdoan.paperscreen.ui.RoundedFrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
