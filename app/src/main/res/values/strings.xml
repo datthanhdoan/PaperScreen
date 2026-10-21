@@ -12,24 +12,72 @@
     <string name="action_resume">Tiếp tục</string>
     <string name="action_stop">Tắt</string>
 
-    <string name="section_permissions">Quyền</string>
-    <string name="overlay_granted">Đã có quyền hiển thị trên ứng dụng khác.</string>
-    <string name="overlay_missing">Cần quyền \"Hiển thị trên ứng dụng khác\" để phủ lớp giấy.</string>
-    <string name="grant_overlay">Cấp quyền hiển thị</string>
-    <string name="restricted_help">Nếu công tắc trong Cài đặt bị mờ hoặc báo \"Cài đặt bị hạn chế\" (thường gặp khi cài APK từ file): mở Thông tin ứng dụng, bấm menu ⋮ ở góc trên bên phải, chọn \"Cho phép cài đặt bị hạn chế\" (Allow restricted settings), xác thực, rồi quay lại cấp quyền hiển thị.</string>
-    <string name="open_app_info">Mở Thông tin ứng dụng</string>
-    <string name="notifications_help">Không bắt buộc. Cho phép thông báo để có nút Tạm dừng và Tắt nhanh. Không cho phép thì lớp giấy vẫn chạy.</string>
-    <string name="grant_notifications">Cho phép thông báo</string>
+    <!-- Main switch -->
+    <string name="enabled">Lớp giấy</string>
+    <string name="status_on">Đang phủ giấy lên mọi ứng dụng</string>
+    <string name="status_off">Đang tắt. Bật để phủ giấy lên toàn màn hình.</string>
+    <string name="status_need_permission">Cần cấp quyền hiển thị ở bước bên dưới trước</string>
 
-    <string name="enabled">Bật lớp giấy</string>
+    <!-- Setup steps -->
+    <string name="section_setup">Thiết lập</string>
+    <string name="setup_summary">Chỉ cần làm một lần.</string>
+    <string name="step_done">Đã xong</string>
+    <string name="step_pending">Chưa xong</string>
+    <string name="step_overlay_title">1. Hiển thị trên ứng dụng khác</string>
+    <string name="overlay_granted">Đã cấp quyền.</string>
+    <string name="overlay_missing">Bắt buộc. Cho phép PaperScreen vẽ lớp giấy lên các ứng dụng khác.</string>
+    <string name="grant_overlay">Cấp quyền</string>
+    <string name="restricted_toggle">Công tắc bị mờ trong Cài đặt?</string>
+    <string name="restricted_help">Android chặn quyền này với ứng dụng cài từ file APK. Mở Thông tin ứng dụng, bấm menu ⋮ ở góc trên bên phải, chọn mục như hình, xác thực, rồi quay lại bấm Cấp quyền.</string>
+    <string name="restricted_mock_title">Thông tin ứng dụng</string>
+    <string name="restricted_mock_item">Cho phép cài đặt bị hạn chế</string>
+    <string name="restricted_mock_item_en">Allow restricted settings</string>
+    <string name="restricted_illustration">Minh họa: menu ba chấm ở góc phải trang Thông tin ứng dụng, mục Cho phép cài đặt bị hạn chế</string>
+    <string name="open_app_info">Mở Thông tin ứng dụng</string>
+    <string name="step_notifications_title">2. Thông báo (không bắt buộc)</string>
+    <string name="notifications_help">Có nút Tạm dừng và Tắt nhanh trong thông báo. Không cho phép thì lớp giấy vẫn chạy.</string>
+    <string name="notifications_granted">Đã cho phép.</string>
+    <string name="grant_notifications">Cho phép</string>
+
+    <!-- Preview -->
+    <string name="section_preview">Xem trước</string>
+    <string name="preview_hint">Giữ ngón tay trên khung để so sánh</string>
+    <string name="preview_compare">Ẩn giấy</string>
+    <string name="preview_compare_description">Ẩn lớp giấy trong khung xem trước để so sánh</string>
+    <string name="preview_overline">Góc đọc</string>
+    <string name="preview_title">Đọc chậm lại một chút</string>
+    <string name="preview_body">Ánh sáng chiều xiên qua khung cửa, trang sách hơi ngả vàng. Màn hình cũng có thể dịu mắt như thế: một lớp sợi giấy mỏng phủ lên chữ và ảnh, đủ để bớt cảm giác kính phẳng mà không làm nhòe nội dung.</string>
+    <string name="preview_body_2">Kéo các thanh bên cạnh và xem khung này thay đổi ngay.</string>
+    <string name="preview_image_description">Ảnh mẫu: đồi núi lúc hoàng hôn</string>
+
+    <!-- Texture controls -->
     <string name="section_texture">Kết cấu giấy</string>
+    <string name="presets">Kiểu nhanh</string>
+    <string name="preset_light">Mỏng nhẹ</string>
+    <string name="preset_balanced">Cân bằng</string>
+    <string name="preset_old_book">Sách cũ</string>
+    <string name="preset_rough">Giấy thô</string>
+    <string name="reset_defaults">Mặc định</string>
+    <string name="reset_done">Đã khôi phục mặc định</string>
+    <string name="undo">Hoàn tác</string>
     <string name="intensity">Độ đậm</string>
+    <string name="intensity_low">Nhạt</string>
+    <string name="intensity_high">Đậm</string>
     <string name="coarseness">Độ thô</string>
+    <string name="coarseness_low">Mịn</string>
+    <string name="coarseness_high">Thô</string>
     <string name="warmth">Độ ấm</string>
-    <string name="vignette">Viền tối (vignette)</string>
+    <string name="warmth_low">Trung tính</string>
+    <string name="warmth_high">Ấm</string>
+    <string name="vignette">Viền tối</string>
+    <string name="vignette_low">Không</string>
+    <string name="vignette_high">Rõ</string>
+    <string name="percent">%1$d%%</string>
     <string name="dim_in_dark">Giảm tông ấm khi dùng giao diện tối</string>
     <string name="new_seed">Đổi mẫu hạt giấy</string>
-    <string name="night_light_tip">Mẹo: muốn tông ấm rõ hơn mà không làm sáng màu đen, hãy dùng Ánh sáng ban đêm (Night Light / Eye comfort) của hệ thống cùng với lớp giấy.</string>
+
+    <!-- Tips -->
+    <string name="night_light_tip">Muốn tông ấm rõ hơn mà không làm sáng màu đen, hãy dùng Ánh sáng ban đêm (Night Light / Eye comfort) của hệ thống cùng với lớp giấy.</string>
     <string name="limitations">Lớp giấy nằm dưới thanh trạng thái, bàn phím và màn hình khóa. Hệ thống tự ẩn nó trên trình cài đặt và một số app ngân hàng. Ảnh chụp màn hình sẽ có cả lớp giấy.</string>
 
     <string name="need_overlay_permission">Hãy cấp quyền hiển thị trên ứng dụng khác trước.</string>

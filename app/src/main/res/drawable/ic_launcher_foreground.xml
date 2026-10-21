@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Slightly tilted sheet of paper with a folded corner, a few lines of text and grain. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFBF2"
-        android:strokeColor="#FF6B4F2A"
-        android:strokeWidth="2"
-        android:pathData="M38,30h22l12,12v34a2,2 0,0 1,-2 2H38a2,2 0,0 1,-2 -2V32a2,2 0,0 1,2 -2z" />
-    <path
-        android:fillColor="#FFE6D3B1"
-        android:pathData="M60,30v12h12z" />
-    <path
-        android:fillColor="#FF6B4F2A"
-        android:pathData="M42,50h24v2H42zM42,57h24v2H42zM42,64h17v2H42z" />
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:rotation="-7">
+        <!-- Soft shadow -->
+        <path
+            android:fillColor="#336B4A22"
+            android:pathData="M39,32h25l13,13v36a4,4 0,0 1,-4 4H39a4,4 0,0 1,-4 -4V36a4,4 0,0 1,4 -4z" />
+        <!-- Sheet -->
+        <path
+            android:fillColor="#FFFFFCF4"
+            android:pathData="M37,28h25l13,13v36a4,4 0,0 1,-4 4H37a4,4 0,0 1,-4 -4V32a4,4 0,0 1,4 -4z" />
+        <!-- Folded corner -->
+        <path
+            android:fillColor="#FFE8D2AC"
+            android:pathData="M62,28v9a4,4 0,0 0,4 4h9z" />
+        <!-- Text lines -->
+        <path
+            android:fillColor="#FFB38D5C"
+            android:pathData="M40,47h28a1.5,1.5 0,0 1,0 3H40a1.5,1.5 0,0 1,0 -3zM40,55h28a1.5,1.5 0,0 1,0 3H40a1.5,1.5 0,0 1,0 -3zM40,63h18a1.5,1.5 0,0 1,0 3H40a1.5,1.5 0,0 1,0 -3z" />
+        <!-- Grain -->
+        <path
+            android:fillColor="#668A6A42"
+            android:pathData="M44,41m-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0zM52,37m-0.8,0a0.8,0.8 0 1,0 1.6,0a0.8,0.8 0 1,0 -1.6,0zM67,46m-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0zM47,72m-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0zM63,74m-0.8,0a0.8,0.8 0 1,0 1.6,0a0.8,0.8 0 1,0 -1.6,0zM70,66m-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0zM41,60m-0.8,0a0.8,0.8 0 1,0 1.6,0a0.8,0.8 0 1,0 -1.6,0z" />
+    </group>
 </vector>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sample picture for the in-app preview: hills at sunset. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="320dp"
+    android:height="160dp"
+    android:viewportWidth="160"
+    android:viewportHeight="80">
+    <path android:pathData="M0,0h160v80h-160z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="0"
+                android:endY="64"
+                android:startX="0"
+                android:startY="0"
+                android:type="linear">
+                <item android:color="@color/preview_sky_top" android:offset="0" />
+                <item android:color="@color/preview_sky_bottom" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:fillColor="@color/preview_sun"
+        android:pathData="M112,34m-11,0a11,11 0,1 0,22 0a11,11 0,1 0,-22 0z" />
+    <path
+        android:fillColor="@color/preview_hill_far"
+        android:pathData="M0,50C28,38 52,42 78,50C104,58 128,40 160,46L160,80L0,80z" />
+    <path
+        android:fillColor="@color/preview_hill_near"
+        android:pathData="M0,64C38,54 68,60 98,68C124,75 144,62 160,64L160,80L0,80z" />
+</vector>

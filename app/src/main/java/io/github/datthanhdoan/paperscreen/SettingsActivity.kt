@@ -1,94 +1,124 @@
 package io.github.datthanhdoan.paperscreen
 
 import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.SeekBar
-import android.widget.Switch
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.AttrRes
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.chip.Chip
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import io.github.datthanhdoan.paperscreen.overlay.OverlayLauncher
+import io.github.datthanhdoan.paperscreen.overlay.PaperAppearance
+import io.github.datthanhdoan.paperscreen.overlay.PaperView
+import io.github.datthanhdoan.paperscreen.overlay.overlayWindowAlpha
 import io.github.datthanhdoan.paperscreen.settings.PaperSettings
 import io.github.datthanhdoan.paperscreen.settings.SettingsRepository
+import io.github.datthanhdoan.paperscreen.texture.TileCache
+import io.github.datthanhdoan.paperscreen.texture.toBitmap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
+import com.google.android.material.R as MaterialR
 
 /**
- * Onboarding (overlay permission, restricted-settings hint, optional notifications) and
- * the sliders. Every change is written to DataStore; the running service reacts to it.
+ * Main switch, onboarding steps (overlay permission, restricted-settings hint, optional
+ * notifications), a live preview and the texture controls. Every change is written to
+ * DataStore; the running service and the preview react to it.
  */
-class SettingsActivity : Activity() {
+class SettingsActivity : AppCompatActivity() {
 
     private val scope = MainScope()
     private lateinit var repository: SettingsRepository
+    private lateinit var tileCache: TileCache
 
-    private lateinit var overlayStatus: TextView
-    private lateinit var grantOverlay: Button
+    private lateinit var root: View
+    private lateinit var mainCard: MaterialCardView
+    private lateinit var mainIcon: ImageView
+    private lateinit var enabledSwitch: MaterialSwitch
+    private lateinit var enabledStatus: TextView
+    private lateinit var setupCard: View
+    private lateinit var overlayStepIcon: ImageView
+    private lateinit var overlayStepText: TextView
+    private lateinit var grantOverlay: View
+    private lateinit var restrictedToggle: MaterialButton
     private lateinit var restrictedHelp: View
-    private lateinit var notificationGroup: View
-    private lateinit var enabledSwitch: Switch
-    private lateinit var dimInDarkSwitch: Switch
-    private lateinit var sliders: List<Slider>
+    private lateinit var notificationStep: View
+    private lateinit var notificationStepIcon: ImageView
+    private lateinit var notificationStepText: TextView
+    private lateinit var grantNotifications: View
+    private lateinit var dimInDarkSwitch: MaterialSwitch
+    private lateinit var presetChips: List<Pair<Chip, Preset>>
+    private lateinit var sliders: List<SliderRow>
+    private lateinit var paperView: PaperView
+    private var windowAlpha = 1f
 
     /** Set while the UI is being updated from DataStore, to avoid writing it back. */
     private var binding = false
+    private var settings = PaperSettings()
+    private var canDraw = false
+    /** The user already went to the overlay settings once, so the restricted hint is likely needed. */
+    private var overlayRequested = false
+    private var notificationsRequested = false
+
+    private val notificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { refreshPermissions() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        DynamicColors.applyToActivityIfAvailable(this)
         setContentView(R.layout.activity_settings)
         repository = SettingsRepository.get(this)
+        tileCache = TileCache(this)
+        overlayRequested = savedInstanceState?.getBoolean(STATE_OVERLAY_REQUESTED) ?: false
+        notificationsRequested = savedInstanceState?.getBoolean(STATE_NOTIFICATIONS_REQUESTED) ?: false
 
-        overlayStatus = findViewById(R.id.overlay_status)
-        grantOverlay = findViewById(R.id.grant_overlay)
-        restrictedHelp = findViewById(R.id.restricted_help)
-        notificationGroup = findViewById(R.id.notification_group)
-        enabledSwitch = findViewById(R.id.enabled_switch)
-        dimInDarkSwitch = findViewById(R.id.dim_in_dark_switch)
-
-        grantOverlay.setOnClickListener { requestOverlayPermission() }
-        findViewById<Button>(R.id.open_app_info).setOnClickListener { openAppInfo() }
-        findViewById<Button>(R.id.grant_notifications).setOnClickListener { requestNotifications() }
-        findViewById<Button>(R.id.new_seed).setOnClickListener {
-            scope.launch { repository.update { it.copy(seed = Random.nextLong()) } }
-        }
-
-        enabledSwitch.setOnCheckedChangeListener { _, checked ->
-            if (!binding) onEnabledToggled(checked)
-        }
-        dimInDarkSwitch.setOnCheckedChangeListener { _, checked ->
-            if (!binding) scope.launch { repository.update { it.copy(dimTintInDarkMode = checked) } }
-        }
-
-        sliders = listOf(
-            Slider(findViewById(R.id.intensity), { it.intensity }) { s, v -> s.copy(intensity = v) },
-            Slider(findViewById(R.id.coarseness), { it.coarseness }) { s, v -> s.copy(coarseness = v) },
-            Slider(findViewById(R.id.warmth), { it.warmth }) { s, v -> s.copy(warmth = v) },
-            Slider(findViewById(R.id.vignette), { it.vignette }) { s, v -> s.copy(vignette = v) },
-        )
-        for (slider in sliders) {
-            val bar = slider.bar
-            bar.max = SLIDER_MAX
-            bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    if (!fromUser || binding) return
-                    val v = progress / SLIDER_MAX.toFloat()
-                    scope.launch { repository.update { slider.set(it, v) } }
-                }
-                override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
-                override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
-            })
-        }
+        root = findViewById(R.id.root)
+        setUpInsets()
+        setUpMainSwitch()
+        setUpSetupSteps()
+        setUpControls()
+        setUpPreview()
 
         scope.launch { repository.settings.collect(::bind) }
     }
@@ -99,20 +129,235 @@ class SettingsActivity : Activity() {
         refreshPermissions()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_OVERLAY_REQUESTED, overlayRequested)
+        outState.putBoolean(STATE_NOTIFICATIONS_REQUESTED, notificationsRequested)
+    }
+
     override fun onDestroy() {
         scope.cancel()
         super.onDestroy()
     }
 
+    // Set-up
+
+    /** Edge-to-edge (enforced from Android 15): pad the bars and cutouts by hand. */
+    private fun setUpInsets() {
+        val appBar = findViewById<View>(R.id.app_bar)
+        val scroll = findViewById<View>(R.id.scroll)
+        val previewPane: View? = findViewById(R.id.preview_pane)
+        val scrollBottom = scroll.paddingBottom
+        val paneBottom = previewPane?.paddingBottom ?: 0
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
+            )
+            view.updatePadding(left = bars.left, right = bars.right)
+            appBar.updatePadding(top = bars.top)
+            scroll.updatePadding(bottom = scrollBottom + bars.bottom)
+            previewPane?.updatePadding(bottom = paneBottom + bars.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun setUpMainSwitch() {
+        mainCard = findViewById(R.id.main_card)
+        mainIcon = findViewById(R.id.main_icon)
+        enabledSwitch = findViewById(R.id.enabled_switch)
+        enabledStatus = findViewById(R.id.enabled_status)
+        enabledSwitch.setOnCheckedChangeListener { _, checked ->
+            if (!binding) onEnabledToggled(checked)
+        }
+    }
+
+    private fun setUpSetupSteps() {
+        setupCard = findViewById(R.id.setup_card)
+        overlayStepIcon = findViewById(R.id.step_overlay_icon)
+        overlayStepText = findViewById(R.id.step_overlay_text)
+        grantOverlay = findViewById(R.id.grant_overlay)
+        restrictedToggle = findViewById(R.id.restricted_toggle)
+        restrictedHelp = findViewById(R.id.restricted_help)
+        notificationStep = findViewById(R.id.step_notifications)
+        notificationStepIcon = findViewById(R.id.step_notifications_icon)
+        notificationStepText = findViewById(R.id.step_notifications_text)
+        grantNotifications = findViewById(R.id.grant_notifications)
+
+        grantOverlay.setOnClickListener { requestOverlayPermission() }
+        restrictedToggle.setOnClickListener { setRestrictedHelpVisible(!restrictedHelp.isVisible) }
+        findViewById<View>(R.id.open_app_info).setOnClickListener { openAppInfo() }
+        grantNotifications.setOnClickListener { requestNotifications() }
+    }
+
+    private fun setUpControls() {
+        dimInDarkSwitch = findViewById(R.id.dim_in_dark_switch)
+        dimInDarkSwitch.setOnCheckedChangeListener { _, checked ->
+            if (!binding) update { it.copy(dimTintInDarkMode = checked) }
+        }
+        findViewById<View>(R.id.new_seed).setOnClickListener { update { it.copy(seed = Random.nextLong()) } }
+        findViewById<View>(R.id.reset_defaults).setOnClickListener { resetDefaults() }
+
+        presetChips = PRESETS.map { preset ->
+            val chip = findViewById<Chip>(preset.chipId)
+            chip.setOnClickListener {
+                // The click already toggled the chip; show the outcome before DataStore echoes it.
+                bindPresets(preset.applyTo(settings))
+                update(preset::applyTo)
+            }
+            chip to preset
+        }
+
+        val container = findViewById<LinearLayout>(R.id.slider_container)
+        sliders = SLIDERS.map { spec ->
+            val item = layoutInflater.inflate(R.layout.item_slider, container, false)
+            container.addView(item)
+            item.findViewById<TextView>(R.id.slider_label).setText(spec.label)
+            item.findViewById<TextView>(R.id.slider_low).setText(spec.low)
+            item.findViewById<TextView>(R.id.slider_high).setText(spec.high)
+            val row = SliderRow(spec, item.findViewById(R.id.slider), item.findViewById(R.id.slider_value))
+            row.slider.contentDescription = getString(spec.label)
+            row.slider.setLabelFormatter(::percent)
+            row.slider.addOnChangeListener { _, value, fromUser ->
+                row.value.text = percent(value)
+                if (fromUser && !binding) update { spec.set(it, value / SLIDER_MAX) }
+            }
+            row.slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                override fun onStartTrackingTouch(slider: Slider) {
+                    row.dragging = true
+                }
+
+                override fun onStopTrackingTouch(slider: Slider) {
+                    row.dragging = false
+                }
+            })
+            row
+        }
+    }
+
+    /** A PaperView over a sample page, fed the same tile and appearance as the overlay. */
+    @SuppressLint("ClickableViewAccessibility") // The compare button is the accessible path.
+    private fun setUpPreview() {
+        val frame = findViewById<FrameLayout>(R.id.preview_frame)
+        // The overlay window is drawn at this alpha; apply it to the view to match.
+        windowAlpha = overlayWindowAlpha(this)
+        paperView = PaperView(this).apply { alpha = windowAlpha }
+        frame.addView(paperView, FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
+
+        val compare = findViewById<MaterialButton>(R.id.preview_compare)
+        compare.addOnCheckedChangeListener { _, checked -> paperView.isInvisible = checked }
+        // Press and hold the sample to see it without paper.
+        frame.setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> paperView.isInvisible = true
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> paperView.isInvisible = compare.isChecked
+            }
+            true
+        }
+
+        scope.launch {
+            var first = true
+            repository.settings.map { it.textureParams }.distinctUntilChanged().collectLatest { params ->
+                // Let a dragged slider settle before regenerating; warmth and vignette are instant.
+                if (!first) delay(PREVIEW_DEBOUNCE_MS)
+                first = false
+                val dpi = resources.configuration.densityDpi
+                val bitmap = withContext(Dispatchers.Default) {
+                    tileCache.loadOrGenerate(params, dpi, windowAlpha) { ensureActive() }.toBitmap()
+                }
+                paperView.setTile(bitmap)
+            }
+        }
+    }
+
+    // Binding
+
     private fun bind(s: PaperSettings) {
+        settings = s
         binding = true
         enabledSwitch.isChecked = s.enabled
         dimInDarkSwitch.isChecked = s.dimTintInDarkMode
-        for (slider in sliders) {
+        for (row in sliders) {
             // Don't fight the finger with a slightly older value echoed back from DataStore.
-            if (!slider.bar.isPressed) slider.bar.progress = (slider.get(s) * SLIDER_MAX).roundToInt()
+            if (!row.dragging) {
+                row.slider.value = (row.spec.get(s) * SLIDER_MAX).roundToInt().coerceIn(0, SLIDER_MAX.toInt()).toFloat()
+            }
+            row.value.text = percent(row.slider.value)
         }
+        bindPresets(s)
         binding = false
+        renderStatus()
+        paperView.setAppearance(
+            PaperAppearance(
+                warmth = s.warmth,
+                vignette = s.vignette,
+                windowAlpha = windowAlpha,
+                nightMode = isNightMode(),
+                dimTintInDarkMode = s.dimTintInDarkMode,
+            ),
+        )
+    }
+
+    private fun bindPresets(s: PaperSettings) {
+        for ((chip, preset) in presetChips) chip.isChecked = preset.matches(s)
+    }
+
+    private fun renderStatus() {
+        val on = settings.enabled && canDraw
+        enabledStatus.setText(
+            when {
+                !canDraw -> R.string.status_need_permission
+                settings.enabled -> R.string.status_on
+                else -> R.string.status_off
+            },
+        )
+        val background = color(if (on) MaterialR.attr.colorPrimaryContainer else MaterialR.attr.colorSurfaceContainerHigh)
+        val content = color(if (on) MaterialR.attr.colorOnPrimaryContainer else MaterialR.attr.colorOnSurface)
+        mainCard.setCardBackgroundColor(background)
+        enabledSwitch.setTextColor(content)
+        enabledStatus.setTextColor(content)
+        mainIcon.imageTintList = ColorStateList.valueOf(content)
+    }
+
+    private fun refreshPermissions() {
+        canDraw = Settings.canDrawOverlays(this)
+        setStepState(overlayStepIcon, canDraw)
+        overlayStepText.setText(if (canDraw) R.string.overlay_granted else R.string.overlay_missing)
+        grantOverlay.isVisible = !canDraw
+        restrictedToggle.isVisible = !canDraw
+        setRestrictedHelpVisible(!canDraw && (overlayRequested || restrictedHelp.isVisible))
+
+        // Section C1: notifications are optional, the overlay works without them.
+        val askNotifications = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        val notificationsGranted = !askNotifications ||
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        notificationStep.isVisible = askNotifications
+        setStepState(notificationStepIcon, notificationsGranted)
+        notificationStepText.setText(
+            if (notificationsGranted) R.string.notifications_granted else R.string.notifications_help,
+        )
+        grantNotifications.isVisible = !notificationsGranted
+
+        setupCard.isVisible = !canDraw || !notificationsGranted
+        renderStatus()
+    }
+
+    private fun setStepState(icon: ImageView, done: Boolean) {
+        icon.setImageResource(if (done) R.drawable.ic_check_circle else R.drawable.ic_step_pending)
+        icon.imageTintList = ColorStateList.valueOf(
+            color(if (done) android.R.attr.colorPrimary else MaterialR.attr.colorOutline),
+        )
+        icon.contentDescription = getString(if (done) R.string.step_done else R.string.step_pending)
+    }
+
+    private fun setRestrictedHelpVisible(visible: Boolean) {
+        restrictedHelp.isVisible = visible
+        restrictedToggle.setIconResource(if (visible) R.drawable.ic_expand_less else R.drawable.ic_expand_more)
+    }
+
+    // Actions
+
+    private fun update(transform: (PaperSettings) -> PaperSettings) {
+        scope.launch { repository.update(transform) }
     }
 
     private fun onEnabledToggled(checked: Boolean) {
@@ -124,12 +369,13 @@ class SettingsActivity : Activity() {
             OverlayLauncher.Result.STARTED, OverlayLauncher.Result.PENDING -> Unit
             OverlayLauncher.Result.NO_PERMISSION -> {
                 setSwitchSilently(false)
-                Toast.makeText(this, R.string.need_overlay_permission, Toast.LENGTH_LONG).show()
-                requestOverlayPermission()
+                Snackbar.make(root, R.string.need_overlay_permission, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.grant_overlay) { requestOverlayPermission() }
+                    .show()
             }
             OverlayLauncher.Result.FAILED -> {
                 setSwitchSilently(false)
-                Toast.makeText(this, R.string.start_failed, Toast.LENGTH_LONG).show()
+                Snackbar.make(root, R.string.start_failed, Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -140,20 +386,17 @@ class SettingsActivity : Activity() {
         binding = false
     }
 
-    private fun refreshPermissions() {
-        val canDraw = Settings.canDrawOverlays(this)
-        overlayStatus.setText(if (canDraw) R.string.overlay_granted else R.string.overlay_missing)
-        grantOverlay.visibility = if (canDraw) View.GONE else View.VISIBLE
-        restrictedHelp.visibility = if (canDraw) View.GONE else View.VISIBLE
-        enabledSwitch.isEnabled = canDraw
-
-        // Section C1: ask for notifications only after the overlay works; it is optional.
-        val needsNotifications = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-        notificationGroup.visibility = if (canDraw && needsNotifications) View.VISIBLE else View.GONE
+    private fun resetDefaults() {
+        val previous = settings
+        // Everything except the on/off state, including parameters added later.
+        update { PaperSettings(enabled = it.enabled) }
+        Snackbar.make(root, R.string.reset_done, Snackbar.LENGTH_LONG)
+            .setAction(R.string.undo) { update { previous.copy(enabled = it.enabled) } }
+            .show()
     }
 
     private fun requestOverlayPermission() {
+        overlayRequested = true
         // Since Android 11 the package Uri is ignored and the generic list opens.
         val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
         try {
@@ -169,29 +412,96 @@ class SettingsActivity : Activity() {
         try {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(this, R.string.cannot_open_settings, Toast.LENGTH_LONG).show()
+            Snackbar.make(root, R.string.cannot_open_settings, Snackbar.LENGTH_LONG).show()
         }
     }
 
     private fun requestNotifications() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATIONS)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        // After a second denial the system stops showing the dialog; go to the settings page.
+        if (notificationsRequested && !shouldShowRequestPermissionRationale(permission)) {
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                openAppInfo()
+            }
+            return
         }
+        notificationsRequested = true
+        notificationPermission.launch(permission)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_NOTIFICATIONS) refreshPermissions()
-    }
+    // Helpers
 
-    private class Slider(
-        val bar: SeekBar,
+    private fun percent(value: Float): String = getString(R.string.percent, value.roundToInt())
+
+    private fun color(@AttrRes attr: Int): Int = MaterialColors.getColor(root, attr)
+
+    private fun isNightMode(): Boolean =
+        (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+
+    /** One texture parameter. Adding a parameter to [PaperSettings] means adding one entry here. */
+    private class SliderSpec(
+        @StringRes val label: Int,
+        @StringRes val low: Int,
+        @StringRes val high: Int,
         val get: (PaperSettings) -> Float,
         val set: (PaperSettings, Float) -> PaperSettings,
     )
 
+    private class SliderRow(val spec: SliderSpec, val slider: Slider, val value: TextView) {
+        var dragging = false
+    }
+
+    private class Preset(
+        @IdRes val chipId: Int,
+        val intensity: Float,
+        val coarseness: Float,
+        val warmth: Float,
+        val vignette: Float,
+    ) {
+        fun applyTo(s: PaperSettings) =
+            s.copy(intensity = intensity, coarseness = coarseness, warmth = warmth, vignette = vignette)
+
+        fun matches(s: PaperSettings) =
+            near(s.intensity, intensity) && near(s.coarseness, coarseness) &&
+                near(s.warmth, warmth) && near(s.vignette, vignette)
+
+        private fun near(a: Float, b: Float) = abs(a - b) < PRESET_TOLERANCE
+    }
+
     private companion object {
-        const val SLIDER_MAX = 100
-        const val REQUEST_NOTIFICATIONS = 1
+        const val SLIDER_MAX = 100f
+        const val PRESET_TOLERANCE = 0.005f
+        const val PREVIEW_DEBOUNCE_MS = 120L
+        const val STATE_OVERLAY_REQUESTED = "overlay_requested"
+        const val STATE_NOTIFICATIONS_REQUESTED = "notifications_requested"
+
+        val SLIDERS = listOf(
+            SliderSpec(R.string.intensity, R.string.intensity_low, R.string.intensity_high, { it.intensity }) { s, v ->
+                s.copy(intensity = v)
+            },
+            SliderSpec(R.string.coarseness, R.string.coarseness_low, R.string.coarseness_high, { it.coarseness }) { s, v ->
+                s.copy(coarseness = v)
+            },
+            SliderSpec(R.string.warmth, R.string.warmth_low, R.string.warmth_high, { it.warmth }) { s, v ->
+                s.copy(warmth = v)
+            },
+            SliderSpec(R.string.vignette, R.string.vignette_low, R.string.vignette_high, { it.vignette }) { s, v ->
+                s.copy(vignette = v)
+            },
+        )
+
+        private val DEFAULTS = PaperSettings()
+
+        val PRESETS = listOf(
+            Preset(R.id.preset_light, intensity = 0.25f, coarseness = 0.3f, warmth = 0.2f, vignette = 0.15f),
+            Preset(R.id.preset_balanced, DEFAULTS.intensity, DEFAULTS.coarseness, DEFAULTS.warmth, DEFAULTS.vignette),
+            Preset(R.id.preset_old_book, intensity = 0.55f, coarseness = 0.45f, warmth = 0.7f, vignette = 0.5f),
+            Preset(R.id.preset_rough, intensity = 0.7f, coarseness = 0.8f, warmth = 0.3f, vignette = 0.35f),
+        )
     }
 }
