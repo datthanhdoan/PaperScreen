@@ -55,7 +55,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         # assembleRelease also runs lintVitalRelease, so tag releases do not fail first time.
-        run: ./gradlew --stacktrace --warning-mode all assembleDebug testDebugUnitTest assembleRelease
+        run: ./gradlew --stacktrace assembleDebug testDebugUnitTest assembleRelease
 
       - name: Print signing certificate
         run: |
