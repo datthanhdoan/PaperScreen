@@ -25,7 +25,9 @@ class TileCache(context: Context) {
         val file = File(dir, key(params, densityDpi, windowAlpha) + ".a8")
         read(file, size)?.let { return it }
 
+        val start = System.nanoTime()
         val tile = TextureGenerator.generate(params, densityDpi, windowAlpha, checkCancelled)
+        Log.i(TAG, "Generated ${size}px tile for ${densityDpi}dpi in ${(System.nanoTime() - start) / 1_000_000} ms")
         write(file, tile)
         return tile
     }

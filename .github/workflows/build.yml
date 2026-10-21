@@ -54,7 +54,8 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew --stacktrace assembleDebug testDebugUnitTest
+        # assembleRelease also runs lintVitalRelease, so tag releases do not fail first time.
+        run: ./gradlew --stacktrace --warning-mode all assembleDebug testDebugUnitTest assembleRelease
 
       - name: Print signing certificate
         run: |
