@@ -3,6 +3,9 @@
     <!-- iOS-style grouped list. Groups sit 16dp in from the screen edge; header and
          footer text lines up with the row content, 16dp further in. -->
 
+    <!-- Implicit parent of the dotted Ios.* names below. -->
+    <style name="Ios" />
+
     <style name="Ios.LargeTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
