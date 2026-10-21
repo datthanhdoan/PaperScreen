@@ -8,7 +8,7 @@ import java.io.IOException
 import java.nio.ByteBuffer
 
 /**
- * Raw ALPHA_8 tiles on disk, keyed by everything that affects the pixels, so a
+ * Raw premultiplied RGBA tiles on disk, keyed by everything that affects the pixels, so a
  * service restart (START_STICKY, boot) does not have to regenerate the texture.
  */
 class TileCache(context: Context) {
@@ -22,7 +22,7 @@ class TileCache(context: Context) {
         checkCancelled: () -> Unit,
     ): TextureTile {
         val size = TextureGenerator.tileSizeFor(densityDpi)
-        val file = File(dir, key(params, densityDpi, windowAlpha) + ".a8")
+        val file = File(dir, key(params, densityDpi, windowAlpha) + EXTENSION)
         read(file, size)?.let { return it }
 
         val start = System.nanoTime()
@@ -33,7 +33,7 @@ class TileCache(context: Context) {
     }
 
     private fun read(file: File, size: Int): TextureTile? = try {
-        if (file.length() == size.toLong() * size) TextureTile(size, file.readBytes()) else null
+        if (file.length() == size.toLong() * size * 4) TextureTile(size, file.readBytes()) else null
     } catch (e: IOException) {
         null
     }
@@ -42,7 +42,7 @@ class TileCache(context: Context) {
         try {
             dir.mkdirs()
             val tmp = File(dir, file.name + ".tmp")
-            tmp.writeBytes(tile.alpha)
+            tmp.writeBytes(tile.pixels)
             tmp.renameTo(file)
             prune(keep = file)
         } catch (e: IOException) {
@@ -51,28 +51,33 @@ class TileCache(context: Context) {
     }
 
     private fun prune(keep: File) {
-        val files = dir.listFiles { f -> f.name.endsWith(".a8") && f != keep } ?: return
+        // ".a8" files are ALPHA_8 tiles from v0.1 and can never be read again.
+        dir.listFiles { f -> f.name.endsWith(".a8") }?.forEach { it.delete() }
+        val files = dir.listFiles { f -> f.name.endsWith(EXTENSION) && f != keep } ?: return
         files.sortedByDescending { it.lastModified() }
             .drop(MAX_FILES - 1)
             .forEach { it.delete() }
     }
 
     private fun key(p: TextureParams, dpi: Int, windowAlpha: Float): String {
-        val h = listOf(VERSION, p.intensity, p.coarseness, p.seed, dpi, windowAlpha).hashCode()
+        val h = listOf(VERSION, p.preset.name, p.intensity, p.coarseness, p.relief, p.seed, dpi, windowAlpha)
+            .hashCode()
         return "tile_${dpi}_" + Integer.toHexString(h)
     }
 
     private companion object {
         const val TAG = "TileCache"
         const val MAX_FILES = 6
+        const val EXTENSION = ".rgba"
         /** Bump when TextureGenerator output changes so stale files are not reused. */
-        const val VERSION = 1
+        const val VERSION = 2
     }
 }
 
 fun TextureTile.toBitmap(): Bitmap {
-    // size is a multiple of 8, so ALPHA_8 rows are not padded and the copy is 1:1.
-    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ALPHA_8)
-    bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(alpha))
+    // ARGB_8888 rows are 4 * size bytes with no padding, and the buffer is already
+    // premultiplied RGBA in memory order, so the copy is 1:1.
+    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(pixels))
     return bitmap
 }
