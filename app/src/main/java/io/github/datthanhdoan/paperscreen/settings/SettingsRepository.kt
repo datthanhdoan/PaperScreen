@@ -8,7 +8,9 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import io.github.datthanhdoan.paperscreen.texture.PaperPreset
 import io.github.datthanhdoan.paperscreen.texture.TextureParams
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -16,15 +18,21 @@ import kotlinx.coroutines.flow.map
 
 data class PaperSettings(
     val enabled: Boolean = false,
-    val intensity: Float = 0.45f,
-    val coarseness: Float = 0.4f,
+    /** Paper type; intensity, coarseness and relief adjust it. */
+    val preset: PaperPreset = PaperPreset.DEFAULT,
+    /** 0.5 is the preset's nominal strength. */
+    val intensity: Float = 0.5f,
+    /** 0.5 keeps the preset's feature sizes. */
+    val coarseness: Float = 0.5f,
+    /** Emboss shading strength ("độ nổi"). */
+    val relief: Float = 0.5f,
     val warmth: Float = 0.35f,
     val vignette: Float = 0.3f,
     val seed: Long = 1L,
     /** Section A6: on a dark UI the warm tint mostly lifts blacks, so scale it down. */
     val dimTintInDarkMode: Boolean = true,
 ) {
-    val textureParams get() = TextureParams(intensity, coarseness, seed)
+    val textureParams get() = TextureParams(preset, intensity, coarseness, relief, seed)
 }
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -50,8 +58,10 @@ class SettingsRepository private constructor(context: Context) {
         val d = PaperSettings()
         return PaperSettings(
             enabled = this[ENABLED] ?: d.enabled,
+            preset = PaperPreset.fromName(this[PRESET]),
             intensity = this[INTENSITY] ?: d.intensity,
             coarseness = this[COARSENESS] ?: d.coarseness,
+            relief = this[RELIEF] ?: d.relief,
             warmth = this[WARMTH] ?: d.warmth,
             vignette = this[VIGNETTE] ?: d.vignette,
             seed = this[SEED] ?: d.seed,
@@ -61,8 +71,10 @@ class SettingsRepository private constructor(context: Context) {
 
     private fun MutablePreferences.write(s: PaperSettings) {
         this[ENABLED] = s.enabled
+        this[PRESET] = s.preset.name
         this[INTENSITY] = s.intensity.coerceIn(0f, 1f)
         this[COARSENESS] = s.coarseness.coerceIn(0f, 1f)
+        this[RELIEF] = s.relief.coerceIn(0f, 1f)
         this[WARMTH] = s.warmth.coerceIn(0f, 1f)
         this[VIGNETTE] = s.vignette.coerceIn(0f, 1f)
         this[SEED] = s.seed
@@ -71,8 +83,10 @@ class SettingsRepository private constructor(context: Context) {
 
     companion object {
         private val ENABLED = booleanPreferencesKey("enabled")
+        private val PRESET = stringPreferencesKey("preset")
         private val INTENSITY = floatPreferencesKey("intensity")
         private val COARSENESS = floatPreferencesKey("coarseness")
+        private val RELIEF = floatPreferencesKey("relief")
         private val WARMTH = floatPreferencesKey("warmth")
         private val VIGNETTE = floatPreferencesKey("vignette")
         private val SEED = longPreferencesKey("seed")

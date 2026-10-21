@@ -24,7 +24,7 @@ data class PaperAppearance(
 )
 
 /**
- * Static full-screen paper layer: tile (BitmapShader REPEAT) -> warm tint -> vignette.
+ * Static full-screen paper layer: ARGB tile (BitmapShader REPEAT) -> warm tint -> vignette.
  * There is no animation; the view only invalidates when its inputs or size change.
  */
 @SuppressLint("ViewConstructor")
@@ -37,7 +37,7 @@ class PaperView(context: Context) : View(context) {
 
     var listener: Listener? = null
 
-    private val texturePaint = Paint().apply { color = INK }
+    private val texturePaint = Paint()
     private val tintPaint = Paint()
     private val vignettePaint = Paint()
 
@@ -55,7 +55,8 @@ class PaperView(context: Context) : View(context) {
     fun setTile(bitmap: Bitmap?) {
         if (bitmap === tile) return
         tile = bitmap
-        // ALPHA_8 shader takes its colour from the paint, so warmth never forces a regenerate (B1).
+        // The ARGB tile carries its own light and dark parts; warmth is a separate layer,
+        // so changing it never forces a regenerate (B1).
         texturePaint.shader = bitmap?.let { BitmapShader(it, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT) }
         invalidate()
     }
@@ -121,7 +122,7 @@ class PaperView(context: Context) : View(context) {
     }
 
     private companion object {
-        /** Very dark warm brown: close to a grey multiply, slightly warmer (B3). */
+        /** Very dark warm brown for the vignette: close to a grey multiply, slightly warmer (B3). */
         val INK = Color.rgb(0x22, 0x18, 0x0E)
         const val MAX_TINT_ALPHA = 0.12f
         const val MAX_VIGNETTE_ALPHA = 0.05f
