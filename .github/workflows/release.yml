@@ -43,7 +43,8 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew --stacktrace testReleaseUnitTest assembleRelease
+        # AGP 9 only creates unit-test tasks for the debug build type by default.
+        run: ./gradlew --stacktrace testDebugUnitTest assembleRelease
 
       - name: Verify and rename APK
         run: |
