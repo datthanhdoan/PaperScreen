@@ -114,6 +114,55 @@
                         android:text="@string/preview_body_2"
                         android:textAppearance="?attr/textAppearanceBodyMedium"
                         android:textColor="?attr/colorOnSurfaceVariant" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/preview_heading_2"
+                        android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/preview_body_3"
+                        android:textAppearance="?attr/textAppearanceBodyLarge" />
+
+                    <!-- A white and a black patch: how the layer treats pure colours. -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/preview_swatch_white"
+                            android:gravity="center"
+                            android:text="@string/preview_white"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="#FF201B15" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/preview_swatch_black"
+                            android:gravity="center"
+                            android:text="@string/preview_black"
+                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                            android:textColor="#FFEDE0D5" />
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>

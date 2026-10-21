@@ -48,6 +48,10 @@
     <string name="preview_title">Đọc chậm lại một chút</string>
     <string name="preview_body">Ánh sáng chiều xiên qua khung cửa, trang sách hơi ngả vàng. Màn hình cũng có thể dịu mắt như thế: một lớp sợi giấy mỏng phủ lên chữ và ảnh, đủ để bớt cảm giác kính phẳng mà không làm nhòe nội dung.</string>
     <string name="preview_body_2">Kéo các thanh bên cạnh và xem khung này thay đổi ngay.</string>
+    <string name="preview_heading_2">Trắng và đen</string>
+    <string name="preview_body_3">Nền trắng được nhuộm nhẹ như giấy, màu đen gần như giữ nguyên.</string>
+    <string name="preview_white">Trắng</string>
+    <string name="preview_black">Đen</string>
     <string name="preview_image_description">Ảnh mẫu: đồi núi lúc hoàng hôn</string>
 
     <!-- Texture controls -->
