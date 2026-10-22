@@ -60,8 +60,9 @@ class TileCache(context: Context) {
     }
 
     private fun key(p: TextureParams, dpi: Int, windowAlpha: Float): String {
-        val h = listOf(VERSION, p.preset.name, p.intensity, p.coarseness, p.relief, p.seed, dpi, windowAlpha)
-            .hashCode()
+        val h = listOf(
+            VERSION, p.preset.name, p.intensity, p.coarseness, p.relief, p.seed, p.darkUi, dpi, windowAlpha,
+        ).hashCode()
         return "tile_${dpi}_" + Integer.toHexString(h)
     }
 

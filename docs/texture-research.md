@@ -107,6 +107,22 @@ Gợi ý cho người dùng (đã có trong B3): để có tông ấm chính xá
 
 Nếu sau này muốn thêm, hướng hợp lý nhất là: lấy *Displacement* 1K của một bộ CC0 làm height map, cắt cho tuần hoàn, cho qua đúng bước chiếu sáng 3.1. Ghi nguồn "ambientCG.com, CC0 1.0".
 
+### 3.4 Hồ sơ cho chế độ tối
+
+Trên giao diện tối, gần như chỉ có điểm sáng của phù điêu là thấy được. Còn mọi tint (ấm, màu preset) đều làm màu đen sáng lên. Vì vậy chế độ tối có hồ sơ riêng:
+
+- `darkProfileEnabled` (mặc định bật): ở dark mode dùng `darkIntensity` (0.5), `darkRelief` (0.6), `darkWarmth` (0.1). Preset, độ thô, vignette và seed dùng chung với chế độ sáng.
+- Tắt hồ sơ riêng thì dark mode dùng thiết lập sáng, và `dimTintInDarkMode` giữ nghĩa cũ (warmth ×0.25).
+- Bất kể hồ sơ, giao diện tối luôn dùng **tile biến thể tối** (`TextureParams.darkUi`): tint của preset chỉ còn 20%, và điểm sáng phù điêu mạnh hơn (gain 0.08 thay vì 0.05, vẫn chặn ở `MAX_LIFT`). Nhờ đó đen của kraft chỉ còn nâng khoảng 2% thay vì 11%.
+- `OverlayService` chọn tile và appearance theo `uiMode`. Hai tile được cache riêng.
+
+### 3.5 Kiểm tra bằng ảnh mô phỏng (không cần thiết bị)
+
+`TexturePreviewTest` (JVM) vẽ ba màn hình mẫu bằng Java2D: trang chữ nền trắng, trang chữ nền tối, ảnh phong cảnh. Sau đó ghép tile, tint và vignette theo đúng cách WindowManager trộn cửa sổ overlay: src-over premultiplied bên trong cửa sổ, rồi `out = W·c + dst·(1 − W·a)`. Hằng số lấy từ `PaperLayers`, cũng là nơi `PaperView` lấy, nên mô phỏng và overlay không lệch nhau. Kết quả nằm ở `app/build/texture-preview/index.html`. CI upload thư mục đó thành artifact `texture-preview-N`.
+
+- `docs/images/texture/sim_dark_old_vs_new.png`: trang nền tối, cắt 1:1. Hàng trên là KRAFT, hàng dưới là PLAIN; bên trái là kiểu cũ (tile sáng, warmth ×0.25), bên phải là hồ sơ tối mới. Kraft không còn biến nền đen thành nâu, còn giấy trơn thấy rõ phù điêu hơn.
+- `docs/images/texture/sim_light_presets.png`: trang nền trắng. Lần lượt là không overlay, PLAIN, DRAWING, DO.
+
 ## 4. Kết quả trên máy thật
 
 Lenovo TB375FC, Android 16, 2944×1840, 340 dpi, window alpha 0.8. Cùng một trang thử (chữ serif và sans 12 px, ảnh, nền trắng, gradient, nền tối #121212) mở trong Brave, chụp bằng `adb exec-out screencap -p` (chụp được cả overlay). Mỗi ảnh chỉ có **một** overlay đang chạy. Bản mới dùng mặc định: intensity 0.5, coarseness 0.5, relief 0.5, warmth 0.35, vignette 0.3. Lúc chụp bản mới, máy đang ở giao diện tối, nên lớp ấm của PaperView bị giảm còn 25% (`dimTintInDarkMode`). Ảnh v0.1.0 thì cho thấy lớp ấm chạy đủ 100% (đen bị nâng kiểu cam), tức là lúc đó máy ở giao diện sáng. Vì vậy hãy so texture, đừng so độ ấm.

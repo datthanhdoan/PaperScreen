@@ -68,6 +68,14 @@ jobs:
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
 
+      # Rendered by TexturePreviewTest: open index.html to compare presets, light and dark.
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: texture-preview-${{ github.run_number }}
+          path: app/build/texture-preview/
+          if-no-files-found: ignore
+
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
