@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.PaperScreen" parent="android:Theme.Material.Light">
-        <item name="android:colorPrimary">@color/paper_primary</item>
-        <item name="android:colorAccent">@color/paper_accent</item>
+    <!-- Material 3 stays as the base only because the Slider needs a Material theme;
+         every visible colour is the iOS-style palette from colors.xml. -->
+    <style name="Theme.PaperScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/ios_accent</item>
+        <item name="colorOnPrimary">@color/ios_cell</item>
+        <item name="colorSecondary">@color/ios_accent</item>
+        <item name="android:colorBackground">@color/ios_background</item>
+        <item name="colorSurface">@color/ios_cell</item>
+        <item name="colorOnSurface">@color/ios_label</item>
+        <item name="colorOnSurfaceVariant">@color/ios_secondary_label</item>
+        <item name="colorOutline">@color/ios_separator</item>
+        <item name="colorControlHighlight">@color/ios_pressed</item>
+        <item name="android:textColorPrimary">@color/ios_label</item>
+        <item name="android:textColorSecondary">@color/ios_secondary_label</item>
+        <item name="android:windowBackground">@color/ios_background</item>
+        <item name="android:windowLightStatusBar">@bool/light_system_bars</item>
     </style>
 
     <style name="Theme.PaperScreen.Invisible" parent="android:Theme.Translucent.NoTitleBar">

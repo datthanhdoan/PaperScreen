@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark mode, the primary look: true black page, raised grouped cells. -->
+<resources>
+    <color name="ios_background">#FF000000</color>
+    <color name="ios_cell">#FF1C1C1E</color>
+    <color name="ios_separator">#FF38383A</color>
+    <color name="ios_label">#FFFFFFFF</color>
+    <color name="ios_secondary_label">#FF8D8D93</color>
+    <color name="ios_chevron">#FF5A5A5F</color>
+    <color name="ios_accent">#FFFF9F0A</color>
+    <color name="ios_orange">#FFFF9F0A</color>
+    <color name="ios_blue">#FF0A84FF</color>
+    <color name="ios_red">#FFFF453A</color>
+    <color name="ios_green">#FF30D158</color>
+    <color name="ios_toggle_off">#FF39393D</color>
+    <color name="ios_segment_background">#FF2C2C30</color>
+    <color name="ios_segment_selected">#FF636366</color>
+    <color name="ios_slider_track">#FF3A3A3E</color>
+    <color name="ios_slider_fill">#FFFF9F0A</color>
+    <color name="ios_pressed">#24FFFFFF</color>
+
+    <color name="preview_page">#FF121212</color>
+    <color name="preview_text">#FFE8E8ED</color>
+    <color name="preview_text_secondary">#FF8D8D93</color>
+    <color name="preview_sky_top">#FF5A4A6E</color>
+    <color name="preview_sky_bottom">#FFB98A72</color>
+    <color name="preview_sun">#FFF3D9A8</color>
+    <color name="preview_hill_far">#FF6E4A3A</color>
+    <color name="preview_hill_near">#FF3D2A20</color>
+</resources>

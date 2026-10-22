@@ -1,30 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="SectionTitle">
+    <!-- iOS-style grouped list. Groups sit 16dp in from the screen edge; header and
+         footer text lines up with the row content, 16dp further in. -->
+
+    <!-- Implicit parent of the dotted Ios.* names below. -->
+    <style name="Ios" />
+
+    <style name="Ios.LargeTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Material.Subhead</item>
-        <item name="android:textColor">?android:attr/colorAccent</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ios_label</item>
+        <item name="android:accessibilityHeading">true</item>
     </style>
 
-    <style name="Body">
+    <style name="Ios.Header">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Material.Body1</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingTop">28dp</item>
+        <item name="android:paddingBottom">7dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/ios_secondary_label</item>
+        <item name="android:accessibilityHeading">true</item>
     </style>
 
-    <style name="SliderLabel">
+    <style name="Ios.Footer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">12dp</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Material.Body2</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingTop">7dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+        <item name="android:textColor">@color/ios_secondary_label</item>
     </style>
 
-    <style name="Slider">
+    <style name="Ios.Group">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/bg_group</item>
+        <item name="android:outlineProvider">background</item>
+    </style>
+
+    <style name="Ios.Row">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/bg_row</item>
+    </style>
+
+    <style name="Ios.RowTitle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/ios_label</item>
+    </style>
+
+    <style name="Ios.RowValue">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/ios_secondary_label</item>
+    </style>
+
+    <style name="Ios.Chevron">
+        <item name="android:layout_width">14dp</item>
+        <item name="android:layout_height">14dp</item>
+        <item name="android:layout_marginStart">6dp</item>
+        <item name="android:src">@drawable/ic_chevron</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="tint">@color/ios_chevron</item>
+    </style>
+
+    <style name="Ios.IconTile">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:background">@drawable/bg_icon_tile</item>
+        <item name="android:importantForAccessibility">no</item>
+        <item name="tint">#FFFFFFFF</item>
+    </style>
+
+    <style name="Ios.Switch">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/ios_label</item>
+        <item name="android:background">@drawable/bg_row</item>
+    </style>
+
+    <style name="Ios.Separator">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:background">@color/ios_separator</item>
+    </style>
+
+    <!-- Separator under a row that has an icon tile: starts at the title. -->
+    <style name="Ios.Separator.Icon">
+        <item name="android:layout_marginStart">58dp</item>
+    </style>
+
+    <style name="Ios.ActionRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/ios_accent</item>
+        <item name="android:background">@drawable/bg_row</item>
+    </style>
+
+    <!-- Thin track, round white thumb, no halo, ticks, thumb gap or stop dot. Material
+         1.13 sizes the thumb from thumbWidth/thumbHeight, so both are set to a circle. -->
+    <style name="Ios.Slider" parent="Widget.MaterialComponents.Slider">
+        <item name="trackHeight">4dp</item>
+        <item name="trackColorActive">@color/ios_slider_fill</item>
+        <item name="trackColorInactive">@color/ios_slider_track</item>
+        <item name="thumbColor">#FFFFFFFF</item>
+        <item name="thumbRadius">14dp</item>
+        <item name="thumbWidth">28dp</item>
+        <item name="thumbHeight">28dp</item>
+        <item name="thumbTrackGapSize">0dp</item>
+        <item name="trackStopIndicatorSize">0dp</item>
+        <item name="trackInsideCornerSize">2dp</item>
+        <item name="trackCornerSize">2dp</item>
+        <item name="thumbElevation">3dp</item>
+        <item name="thumbStrokeColor">#1F000000</item>
+        <item name="thumbStrokeWidth">0.5dp</item>
+        <item name="haloRadius">0dp</item>
+        <item name="tickVisible">false</item>
+        <item name="labelBehavior">gone</item>
+    </style>
+
+    <style name="ShapeAppearance.PaperScreen.Photo" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
     </style>
 </resources>

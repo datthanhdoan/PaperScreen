@@ -76,6 +76,15 @@ jobs:
           path: app/build/texture-preview/
           if-no-files-found: ignore
 
+      # Rendered by SettingsScreenshotTest (Robolectric): the settings screen on phone and
+      # tablet, light and dark. Open index.html.
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: settings-preview-${{ github.run_number }}
+          path: app/build/settings-preview/
+          if-no-files-found: ignore
+
       - uses: actions/upload-artifact@v7
         if: failure()
         with:

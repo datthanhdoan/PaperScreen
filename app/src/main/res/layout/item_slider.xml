@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One texture parameter inside a group: name and value, then a thin slider between a
+     small and a large version of its icon. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/slider_separator"
+        style="@style/Ios.Separator" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="11dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/slider_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/ios_label"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/slider_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFeatureSettings="tnum"
+            android:importantForAccessibility="no"
+            android:textColor="@color/ios_secondary_label"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="4dp">
+
+        <ImageView
+            android:id="@+id/slider_low"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:alpha="0.8"
+            android:importantForAccessibility="no"
+            app:tint="@color/ios_secondary_label" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider"
+            style="@style/Ios.Slider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:saveEnabled="false"
+            android:stepSize="1"
+            android:valueFrom="0"
+            android:valueTo="100" />
+
+        <ImageView
+            android:id="@+id/slider_high"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:importantForAccessibility="no"
+            app:tint="@color/ios_secondary_label" />
+    </LinearLayout>
+</LinearLayout>

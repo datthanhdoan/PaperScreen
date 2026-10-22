@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- iOS-style grouped settings palette (light). Dark values live in values-night;
+     dark mode is the primary look. -->
 <resources>
-    <color name="paper_primary">#FF6B4F2A</color>
-    <color name="paper_accent">#FFB07A3A</color>
-    <color name="ic_launcher_background">#FFF3EAD8</color>
+    <color name="ios_background">#FFF2F2F7</color>
+    <color name="ios_cell">#FFFFFFFF</color>
+    <color name="ios_separator">#FFC6C6C8</color>
+    <color name="ios_label">#FF000000</color>
+    <color name="ios_secondary_label">#FF6C6C70</color>
+    <color name="ios_chevron">#FFC4C4C7</color>
+    <!-- Text accent: darker than the orange fill so it passes 4.5:1 on white. -->
+    <color name="ios_accent">#FFC26A00</color>
+    <color name="ios_orange">#FFFF9500</color>
+    <color name="ios_blue">#FF007AFF</color>
+    <color name="ios_red">#FFD70015</color>
+    <color name="ios_green">#FF34C759</color>
+    <color name="ios_toggle_off">#FFE9E9EA</color>
+    <color name="ios_segment_background">#FFEEEEEF</color>
+    <color name="ios_segment_selected">#FFFFFFFF</color>
+    <color name="ios_slider_track">#FFE5E5EA</color>
+    <color name="ios_slider_fill">#FFFF9500</color>
+    <color name="ios_pressed">#1F000000</color>
+
+    <!-- The sample page inside the preview. -->
+    <color name="preview_page">#FFFFFFFF</color>
+    <color name="preview_text">#FF1C1C1E</color>
+    <color name="preview_text_secondary">#FF6C6C70</color>
+    <color name="preview_sky_top">#FFF6C98F</color>
+    <color name="preview_sky_bottom">#FFF9E6C6</color>
+    <color name="preview_sun">#FFFFF6DF</color>
+    <color name="preview_hill_far">#FFC98A5E</color>
+    <color name="preview_hill_near">#FF8E5A3C</color>
 </resources>
